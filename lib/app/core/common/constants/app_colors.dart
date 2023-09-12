@@ -8,14 +8,14 @@ class AppColors {
   static const Color grey_400 = Color(0xFF373737);
   static const Color grey_500 = Color(0xFF303030);
   static const Color grey_600 = Color(0xFF232323);
+  static const Color grey_900 = Color(0xFF17131B);
   static const Color black = Colors.black;
 
   static const Color pink_400 = Color(0xFFEA335F);
   static const Color pink_800 = Color(0xFFEA335F);
 
-  static const Color purple_400 = Color(0xFF9333EA);
+  // static const Color purple_400 = Color(0xFF9333EA);
   static const Color purple_800 = Color(0xFF1B0431);
-  static const Color purple_900 = Color(0xFF17131B);
 
   static const Color green_400 = Color(0xFF52FF00);
 
@@ -25,7 +25,7 @@ class AppColors {
   static LinearGradient backgrondGradient = const LinearGradient(
     colors: [
       grey_600,
-      purple_900,
+      grey_900,
     ],
     tileMode: TileMode.mirror,
     begin: Alignment.topRight,

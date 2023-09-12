@@ -39,9 +39,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         builder: (context, state) {
           if (context.isLandscape) {
             return ScaffoldGradientBackground(
+              gradient: AppColors.backgrondGradient,
               drawer: const Drawer(),
               appBar: const HomeAppbar(),
-              gradient: AppColors.backgrondGradient,
               body: _content,
             );
           }

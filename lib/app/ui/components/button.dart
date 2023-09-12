@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/errors/failures.dart';
 import 'package:anime_app/app/core/common/extensions/color_extension.dart';
+import 'package:anime_app/app/core/common/utils/toasting.dart';
 import 'package:anime_app/app/core/common/utils/vibrate.dart';
 import 'package:anime_app/app/ui/components/loader.dart';
-import 'package:anime_app/app/core/common/utils/toasting.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 // Custom buttons are created by extending the MaterialButton class
 class Button extends StatefulWidget {
@@ -45,7 +45,7 @@ class Button extends StatefulWidget {
             ),
           ),
           elevation: MaterialStateProperty.all<double>(5),
-          backgroundColor: (disabled ? AppColors.purple_400.withOpacity(0.6) : color ?? AppColors.purple_400).toMaterialStateProperty(),
+          backgroundColor: (disabled ? AppColors.pink_400.withOpacity(0.6) : color ?? AppColors.pink_400).toMaterialStateProperty(),
           foregroundColor: (disabled ? AppColors.grey_200 : AppColors.white).toMaterialStateProperty(),
           textStyle: MaterialStateProperty.all<TextStyle?>(
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

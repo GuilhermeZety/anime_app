@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData get dark => ThemeData(
         fontFamily: 'RobotoSlab',
-        primarySwatch: AppColors.purple_400.toMaterialColor(),
+        primarySwatch: AppColors.pink_400.toMaterialColor(),
         textSelectionTheme: TextSelectionThemeData(
-          selectionHandleColor: AppColors.purple_400,
-          cursorColor: AppColors.purple_400,
-          selectionColor: AppColors.purple_400.withOpacity(0.2),
+          selectionHandleColor: AppColors.pink_400,
+          cursorColor: AppColors.pink_400,
+          selectionColor: AppColors.pink_400.withOpacity(0.2),
         ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(color: AppColors.grey_100, letterSpacing: 0.4),
