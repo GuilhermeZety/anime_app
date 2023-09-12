@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:anime_app/app/core/common/services/connection/connection_service.dart';
 import 'package:anime_app/app/core/common/services/requests/errors/not_internet_connection_exception.dart';
 import 'package:anime_app/app/core/common/services/requests/request_result.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class DioRequestService extends RequestService {
   final Dio _dio;

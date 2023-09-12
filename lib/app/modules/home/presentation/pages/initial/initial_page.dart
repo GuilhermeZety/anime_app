@@ -1,3 +1,4 @@
+import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/ui/components/input.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _InitialPageState extends State<InitialPage> {
               padding: EdgeInsets.only(left: 20, right: 10),
               child: Icon(Icons.search_rounded),
             ),
-            onSubmit: (_) => Modular.to.pushNamed('/search/', arguments: controller),
+            onSubmit: (_) => Modular.to.pushNamed(AppRoutes.search, arguments: controller),
             hint: 'Insira o nome do anime',
           ).hero('search'),
         ],

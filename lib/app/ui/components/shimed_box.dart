@@ -9,12 +9,14 @@ class ShimmedBox extends StatelessWidget {
     this.width,
     this.margin,
     this.padding,
+    this.radius = 20,
   });
 
   final double? height;
   final double? width;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,9 @@ class ShimmedBox extends StatelessWidget {
       padding: padding,
       height: height,
       width: width,
-      decoration: const BoxDecoration(
-        color: AppColors.grey_100,
+      decoration: BoxDecoration(
+        color: AppColors.grey_500,
+        borderRadius: BorderRadius.circular(radius),
       ),
     ).shim();
   }

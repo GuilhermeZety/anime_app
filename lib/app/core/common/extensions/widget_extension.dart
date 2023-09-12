@@ -1,11 +1,11 @@
+import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 extension Expanding on Widget {
   Widget expanded({int flex = 1}) => Expanded(flex: flex, child: this);
 
-  Widget expandedH({int flex = 1}) =>
-      Row(children: [Expanded(flex: flex, child: this)]);
+  Widget expandedH({int flex = 1}) => Row(children: [Expanded(flex: flex, child: this)]);
 }
 
 extension Heroic on Widget {
@@ -18,6 +18,8 @@ extension Heroic on Widget {
 }
 
 extension Shimmer on Widget {
-  Widget shim() => animate(onPlay: (controller) => controller.repeat())
-      .shimmer(duration: 3.seconds, color: Colors.grey.shade100);
+  Widget shim() => animate(onPlay: (controller) => controller.repeat()).shimmer(
+        duration: 3.seconds,
+        color: AppColors.grey_300.withOpacity(0.4),
+      );
 }

@@ -3,6 +3,7 @@ import 'package:anime_app/app/core/common/services/connection/ping_connection_se
 import 'package:anime_app/app/core/common/services/requests/dio_request_service.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/common/utils/toasting.dart';
+import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/modules/home/home_module.dart';
 import 'package:anime_app/app/modules/not_connection/presenter/not_connection_page.dart';
 import 'package:anime_app/app/modules/not_found/presentation/pages/not_found_page.dart';
@@ -17,6 +18,7 @@ class AppModule extends Module {
   void binds(Injector i) {
     i.addSingleton<ConnectionService>(() => PingConnectionServiceImpl());
     i.addSingleton<RequestService>(() => DioRequestService());
+    AnimeLogic.binds(i);
   }
 
   @override
