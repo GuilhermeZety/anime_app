@@ -16,7 +16,7 @@ class CustomDialog extends StatefulWidget {
     this.topSize = 30,
     this.bottomSize = 30,
     this.dimissAction,
-    this.margin,
+    this.margin = const EdgeInsets.all(20),
   });
 
   final bool showBackButton;

@@ -1,5 +1,6 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
+import 'package:anime_app/app/ui/dialogs/coming_soon_modal.dart';
 import 'package:flutter/material.dart';
 
 class HomeAppbar extends StatefulWidget implements PreferredSizeWidget {
@@ -14,7 +15,7 @@ class HomeAppbar extends StatefulWidget implements PreferredSizeWidget {
 
 class _HomeAppbarState extends State<HomeAppbar> {
   void _openNotifications() {
-    //TODO: open notifications
+    ComingSoonModal.show(context);
   }
 
   @override
@@ -44,12 +45,20 @@ class _HomeAppbarState extends State<HomeAppbar> {
             }
             return Row(
               children: [
-                Container(
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(1000),
-                    color: Colors.white.withOpacity(0.2),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      ComingSoonModal.show(context);
+                    },
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(1000),
+                        color: Colors.white.withOpacity(0.2),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -72,7 +81,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                     textColor: AppColors.white,
                     child: Icon(
                       Icons.notifications_rounded,
-                      color: Colors.white,
+                      color: AppColors.grey_200,
                     ),
                   ),
                 ),

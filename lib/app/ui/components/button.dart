@@ -41,7 +41,7 @@ class Button extends StatefulWidget {
         style = ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
           elevation: MaterialStateProperty.all<double>(5),
@@ -73,7 +73,7 @@ class Button extends StatefulWidget {
         style = ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
           elevation: MaterialStateProperty.all<double>(5),

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
+import 'package:flutter/material.dart';
 
 Future<T?> showCustomDialog<T>(
   BuildContext context, {

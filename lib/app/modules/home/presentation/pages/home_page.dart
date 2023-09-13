@@ -3,6 +3,7 @@ import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/modules/home/presentation/components/bottom_bar.dart';
 import 'package:anime_app/app/modules/home/presentation/components/home_appbar.dart';
 import 'package:anime_app/app/modules/home/presentation/cubit/home_cubit.dart';
+import 'package:anime_app/app/modules/home/presentation/pages/favorites/favorites_page.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/initial/initial_page.dart';
 import 'package:anime_app/app/ui/components/coming_soon.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         controller: _cubit.controller,
         children: const [
           InitialPage(),
-          Center(child: ComingSoon()),
+          FavoritesPage(),
           Center(child: ComingSoon()),
           Center(child: ComingSoon()),
         ],

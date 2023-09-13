@@ -1,0 +1,20 @@
+import 'package:anime_app/app/core/common/errors/failures.dart';
+import 'package:anime_app/app/core/common/features/usecases/usecase.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
+import 'package:dartz/dartz.dart';
+
+class GetReleases extends Usecase<List<EpisodeEntity>, NoParams> {
+  final AnimeRepository repository;
+
+  GetReleases({
+    required this.repository,
+  });
+
+  @override
+  Future<Either<Failure, List<EpisodeEntity>>> call(
+    NoParams params,
+  ) async {
+    return await repository.getReleases();
+  }
+}

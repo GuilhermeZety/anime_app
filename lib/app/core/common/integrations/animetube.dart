@@ -4,4 +4,5 @@ class Animetube {
 
   //ENDPOINTS
   String search(String value) => '${baseUrl}busca.php?s=$value&submit=Buscar';
+  String releases() => baseUrl;
 }

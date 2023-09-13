@@ -5,7 +5,7 @@ import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/search_anime.dart';
-import 'package:anime_app/app/modules/search/presentation/components/anime_item.dart';
+import 'package:anime_app/app/core/shared/anime/presentation/components/anime_item.dart';
 import 'package:anime_app/app/ui/components/input_search.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
 import 'package:flutter/material.dart';
@@ -58,53 +58,70 @@ class _SearchPageState extends State<SearchPage> {
           physics: const BouncingScrollPhysics(),
           slivers: [
             _buildSearch(),
-            _buildAnimes(),
+            if (animes.isNotEmpty || loading == true) _buildAnimes() else _buildNoResults(),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildNoResults() => SliverPadding(
+        padding: EdgeInsets.only(right: 20, left: 20, bottom: 20, top: context.height * 0.4),
+        sliver: SliverList.list(
+          children: const [
+            Center(
+              child: Text(
+                'Nenhum resultado encontrado',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: AppColors.grey_200,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
   Widget _buildSearch() {
-    return SliverPadding(
-      padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
-      sliver: SliverList.list(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Pesquisar',
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: AppColors.grey_200),
-              ),
-            ],
-          ),
-          const Gap(10),
-          Row(
-            children: [
-              IconButton(
-                color: AppColors.grey_200,
-                onPressed: () => Modular.to.pop(),
-                icon: const Icon(Icons.arrow_back),
-              ),
-              const Gap(20),
-              InputSearch(
-                widget.controller,
-                searchAction: (_) async {
-                  await search();
-                },
-                hint: 'Insira o nome do anime',
-                prefixIcon: const Icon(Icons.search),
-              ).hero('search').expanded(),
-            ],
-          ),
-        ],
+    return SliverAppBar(
+      pinned: true,
+      floating: true,
+      leading: const SizedBox(),
+      backgroundColor: AppColors.grey_700.withOpacity(0.5),
+      elevation: 0,
+      expandedHeight: 100,
+      collapsedHeight: 100,
+      flexibleSpace: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  color: AppColors.grey_200,
+                  onPressed: () => Modular.to.pop(),
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                const Gap(20),
+                InputSearch(
+                  widget.controller,
+                  searchAction: (_) async {
+                    await search();
+                  },
+                  hint: 'Insira o nome do anime',
+                  prefixIcon: const Icon(Icons.search),
+                ).hero('search').expanded(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildAnimes() {
-    var qtd = ((context.width - 40) / 150).floor().abs();
+    var qtd = ((context.width - 40) / 180).floor().abs();
     if (qtd > 6) {
       qtd = 6;
     }
