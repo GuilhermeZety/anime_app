@@ -29,17 +29,23 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var response = await Modular.get<SearchAnime>()(SearchAnimeParams(value: widget.controller.text));
-
-      response.fold((l) {
-        log(l.toString());
-      }, (r) {
-        loading = false;
-        animes = r;
-        if (mounted) setState(() {});
-      });
+      await search();
     });
     super.initState();
+  }
+
+  Future search() async {
+    loading = true;
+    if (mounted) setState(() {});
+    var response = await Modular.get<SearchAnime>()(SearchAnimeParams(value: widget.controller.text));
+
+    response.fold((l) {
+      log(l.toString());
+    }, (r) {
+      animes = r;
+    });
+    loading = false;
+    if (mounted) setState(() {});
   }
 
   @override
@@ -75,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
               InputSearch(
                 widget.controller,
                 searchAction: (_) async {
-                  //TODO: Logic to search
+                  await search();
                 },
                 hint: 'Insira o nome do anime',
                 prefixIcon: const Icon(Icons.search),

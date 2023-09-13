@@ -18,7 +18,9 @@ extension Heroic on Widget {
 }
 
 extension Shimmer on Widget {
-  Widget shim() => animate(onPlay: (controller) => controller.repeat()).shimmer(
+  Widget shim() => animate(
+        onPlay: (controller) => controller.repeat(),
+      ).shimmer(
         duration: 3.seconds,
         color: AppColors.grey_300.withOpacity(0.4),
       );
