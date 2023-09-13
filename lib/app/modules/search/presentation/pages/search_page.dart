@@ -53,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
     return ScaffoldGradientBackground(
       gradient: AppColors.backgrondGradient,
       body: Padding(
-        padding: const EdgeInsets.only(top: 30, right: 30, left: 30),
+        padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -71,13 +71,23 @@ class _SearchPageState extends State<SearchPage> {
       sliver: SliverList.list(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Pesquisar',
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: AppColors.grey_200),
+              ),
+            ],
+          ),
+          const Gap(10),
+          Row(
             children: [
               IconButton(
                 color: AppColors.grey_200,
                 onPressed: () => Modular.to.pop(),
                 icon: const Icon(Icons.arrow_back),
               ),
-              const Gap(10),
+              const Gap(20),
               InputSearch(
                 widget.controller,
                 searchAction: (_) async {

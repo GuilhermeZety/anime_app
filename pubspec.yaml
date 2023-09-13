@@ -33,7 +33,6 @@ dependencies:
   flutter_native_splash: ^2.3.2
   flextras: ^1.0.0
   html: ^0.15.4
-  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
