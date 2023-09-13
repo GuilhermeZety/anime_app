@@ -10,7 +10,7 @@ abstract class EpisodeEntity extends Equatable {
   final String? duration;
 
   /// 0 - 480p, 1 - 720p, 2 - 1080p
-  final int quality;
+  // final int quality;
 
   const EpisodeEntity({
     required this.uuid,
@@ -19,7 +19,6 @@ abstract class EpisodeEntity extends Equatable {
     this.uploadDate,
     this.duration,
     required this.episode,
-    required this.quality,
   });
 
   @override
@@ -34,7 +33,6 @@ abstract class EpisodeEntity extends Equatable {
       uploadDate,
       duration,
       episode,
-      quality,
     ];
   }
 }

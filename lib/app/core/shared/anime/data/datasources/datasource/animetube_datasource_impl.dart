@@ -40,27 +40,49 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
 
   @override
   Future<List<EpisodeModel>> getReleases() async {
+    await Future.delayed(const Duration(seconds: 2));
     //TODO: IMPLEMENT THIS RELEASES GET
 
-    // final response = await requestService.get(
-    //   integration.releases(),
-    // );
+    final response = await requestService.get(
+      integration.releases(),
+    );
 
-    // if (response.data != null && response.data is String) {
-    //   List<AnimeModel> animes = [];
-    //   var document = parse(response.data);
+    if (response.data != null && response.data is String) {
+      List<EpisodeModel> episodes = [];
+      var document = parse(response.data);
 
-    //   var list = document.querySelectorAll('.ani_loop_item');
+      var list = document.querySelectorAll('.mContainer');
 
-    //   for (var anime in list) {
-    //     var name = anime.querySelector('.ani_loop_item_infos_nome');
-    //     var uuid = name?.attributes['href']?.split('/').last;
-    //     var image = anime.querySelector('.ani_loop_item_img img')?.attributes['src'];
+      if (list.isEmpty) return [];
 
-    //     animes.add(AnimeModel(uuid: uuid ?? 'not_found', image: image, name: name?.text));
-    //   }
-    //   return animes;
-    // }
+      var release = list
+          .where(
+            (element) => element.querySelector('.mContainer_titulo_content')?.text.contains('Lançamentos') == true,
+          )
+          .firstOrNull;
+
+      if (release == null) return [];
+
+      var items = release.querySelectorAll('.epi_loop_item');
+
+      for (var ep in items) {
+        var image = ep.querySelector('img');
+
+        var imageURL = image?.attributes['src']?.split('/') ?? [];
+
+        var uuid = imageURL[imageURL.length - 2];
+
+        episodes.add(
+          EpisodeModel(
+            uuid: uuid,
+            episode: 0,
+            name: image?.attributes['title'],
+            image: image?.attributes['src'],
+          ),
+        );
+      }
+      return episodes;
+    }
     return [];
   }
 }

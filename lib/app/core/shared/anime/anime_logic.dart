@@ -4,6 +4,7 @@ import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/repositories/anime_repository_impl.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
+import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/search_anime.dart';
 import 'package:anime_app/main.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -19,6 +20,11 @@ class AnimeLogic {
     );
     i.addLazySingleton<SearchAnime>(
       () => SearchAnime(
+        repository: i.get<AnimeRepository>(),
+      ),
+    );
+    i.addLazySingleton<GetReleases>(
+      () => GetReleases(
         repository: i.get<AnimeRepository>(),
       ),
     );

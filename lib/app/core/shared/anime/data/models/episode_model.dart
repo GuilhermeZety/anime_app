@@ -7,7 +7,6 @@ class EpisodeModel extends EpisodeEntity {
   const EpisodeModel({
     required super.uuid,
     required super.episode,
-    required super.quality,
     super.image,
     super.duration,
     super.uploadDate,
@@ -28,7 +27,6 @@ class EpisodeModel extends EpisodeEntity {
       image: image ?? this.image,
       name: name ?? this.name,
       episode: episode ?? this.episode,
-      quality: quality ?? this.quality,
       uploadDate: uploadDate ?? this.uploadDate,
       duration: duration ?? this.duration,
     );
@@ -40,7 +38,6 @@ class EpisodeModel extends EpisodeEntity {
       'image': image,
       'name': name,
       'episode': episode,
-      'quality': quality,
       'uploadDate': uploadDate,
       'duration': duration,
     };
@@ -54,7 +51,6 @@ class EpisodeModel extends EpisodeEntity {
       duration: map['duration'] != null ? map['duration'] as String : null,
       uploadDate: map['uploadDate'] != null ? map['uploadDate'] as String : null,
       episode: map['episode'] as int,
-      quality: map['quality'] as int,
     );
   }
 
