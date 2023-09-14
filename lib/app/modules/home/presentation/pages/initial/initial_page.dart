@@ -1,15 +1,13 @@
-import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/common/features/usecases/usecase.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
-import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
+import 'package:anime_app/app/core/shared/anime/presentation/components/episode_item.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/initial/cubit/initial_cubit.dart';
 import 'package:anime_app/app/ui/components/input.dart';
 import 'package:anime_app/app/ui/components/loader.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:gap/gap.dart';
 
@@ -23,30 +21,41 @@ class InitialPage extends StatefulWidget {
 class _InitialPageState extends State<InitialPage> {
   TextEditingController controller = TextEditingController();
 
-  InitialCubit _cubit = Modular.get<InitialCubit>();
+  final InitialCubit _cubit = Modular.get<InitialCubit>();
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit.init();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: SingleChildScrollView(
-        child: SeparatedColumn(
-          separatorBuilder: () => const Gap(20),
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Input(
-              controller,
-              prefixIcon: const Padding(
-                padding: EdgeInsets.only(left: 20, right: 10),
-                child: Icon(Icons.search_rounded),
-              ),
-              onSubmit: (_) => Modular.to.pushNamed(AppRoutes.search, arguments: controller),
-              hint: 'Insira o nome do anime',
-            ).hero('search'),
-            _buildReleases,
-          ],
-        ),
-      ),
+    return BlocBuilder(
+      bloc: _cubit,
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: SingleChildScrollView(
+            child: SeparatedColumn(
+              separatorBuilder: () => const Gap(20),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Input(
+                  controller,
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.only(left: 20, right: 10),
+                    child: Icon(Icons.search_rounded),
+                  ),
+                  onSubmit: (_) => Modular.to.pushNamed(AppRoutes.search, arguments: controller),
+                  hint: 'Insira o nome do anime',
+                ).hero('search'),
+                _buildReleases,
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -63,39 +72,28 @@ class _InitialPageState extends State<InitialPage> {
           const Gap(10),
           SizedBox(
             height: 200,
-            child: FutureBuilder(
-              future: Modular.get<GetReleases>()(NoParams()).then((value) => value.fold((l) => <EpisodeEntity>[], (r) => r)),
-              builder: (context, value) {
-                if (value.connectionState == ConnectionState.waiting) {
+            child: Builder(
+              builder: (context) {
+                if (_cubit.releasesLoading) {
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (_, __) => const ShimmedBox(
                       height: 200,
-                      width: 150,
+                      width: 200,
                     ),
                     separatorBuilder: (_, __) => const Gap(10),
                     itemCount: 10,
                   );
-                }
-                if (value.connectionState == ConnectionState.done && value.hasData) {
+                } else if (_cubit.releases.isNotEmpty) {
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, index) => Container(
+                    itemBuilder: (_, index) => SizedBox(
+                      width: 200,
                       height: 200,
-                      width: 150,
-                      color: AppColors.grey_300,
-                      child: Center(
-                        child: Text(
-                          value.data?[index].name ?? '',
-                          style: const TextStyle(
-                            color: AppColors.grey_500,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      child: EpisodeItem(anime: _cubit.releases[index]),
                     ),
                     separatorBuilder: (_, __) => const Gap(10),
-                    itemCount: value.data!.length,
+                    itemCount: _cubit.releases.length,
                   );
                 }
                 return const Center(

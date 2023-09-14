@@ -17,19 +17,10 @@ class AnimeItem extends StatefulWidget {
 
 class _AnimeItemState extends State<AnimeItem> {
   bool hooved = false;
-  bool favorited = false;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      favorited = AnimeLogic.getFavoriteAnime(widget.anime.uuid) != null;
-      if (mounted) setState(() {});
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    var favorited = AnimeLogic.getFavoriteAnime(widget.anime.uuid) != null;
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) {

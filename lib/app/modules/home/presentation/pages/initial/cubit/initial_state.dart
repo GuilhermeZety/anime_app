@@ -8,3 +8,5 @@ sealed class InitialState extends Equatable {
 }
 
 final class InitialInitial extends InitialState {}
+
+final class InitialSetState extends InitialState {}

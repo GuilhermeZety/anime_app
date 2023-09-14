@@ -9,6 +9,7 @@ import 'package:anime_app/app/core/shared/anime/presentation/components/anime_it
 import 'package:anime_app/app/ui/components/input_search.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:gap/gap.dart';
 import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
@@ -140,7 +141,7 @@ class _SearchPageState extends State<SearchPage> {
           else
             ...animes
                 .map(
-                  (e) => AnimeItem(anime: e),
+                  (e) => AnimeItem(anime: e).animate().fade(),
                 )
                 .toList(),
         ],
