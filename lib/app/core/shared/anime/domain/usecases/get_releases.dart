@@ -4,7 +4,7 @@ import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.d
 import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class GetReleases extends Usecase<List<EpisodeEntity>, NoParams> {
+class GetReleases extends Usecase<Stream<List<EpisodeEntity>>, NoParams> {
   final AnimeRepository repository;
 
   GetReleases({
@@ -12,7 +12,7 @@ class GetReleases extends Usecase<List<EpisodeEntity>, NoParams> {
   });
 
   @override
-  Future<Either<Failure, List<EpisodeEntity>>> call(
+  Future<Either<Failure, Stream<List<EpisodeEntity>>>> call(
     NoParams params,
   ) async {
     return await repository.getReleases();

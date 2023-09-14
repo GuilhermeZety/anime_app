@@ -1,15 +1,14 @@
+import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
+import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/components/episode_item.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/initial/cubit/initial_cubit.dart';
 import 'package:anime_app/app/ui/components/input.dart';
-import 'package:anime_app/app/ui/components/loader.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
-import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:gap/gap.dart';
 
 class InitialPage extends StatefulWidget {
   const InitialPage({super.key});
@@ -34,74 +33,87 @@ class _InitialPageState extends State<InitialPage> {
     return BlocBuilder(
       bloc: _cubit,
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: SingleChildScrollView(
-            child: SeparatedColumn(
-              separatorBuilder: () => const Gap(20),
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Input(
-                  controller,
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.only(left: 20, right: 10),
-                    child: Icon(Icons.search_rounded),
-                  ),
-                  onSubmit: (_) => Modular.to.pushNamed(AppRoutes.search, arguments: controller),
-                  hint: 'Insira o nome do anime',
-                ).hero('search'),
-                _buildReleases,
-              ],
-            ),
-          ),
+        return CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            _buildSearch(),
+            ..._buildReleases(),
+          ],
         );
       },
     );
   }
 
-  Widget get _buildReleases => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '🔥 Lançamentos',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+  Widget _buildSearch() {
+    return SliverAppBar(
+      pinned: true,
+      floating: true,
+      leading: const SizedBox(),
+      backgroundColor: AppColors.grey_700.withOpacity(0.5),
+      elevation: 0,
+      expandedHeight: 90,
+      collapsedHeight: 90,
+      flexibleSpace: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Input(
+              controller,
+              prefixIcon: const Padding(
+                padding: EdgeInsets.only(left: 20, right: 10),
+                child: Icon(Icons.search_rounded),
+              ),
+              onSubmit: (_) => Modular.to.pushNamed(AppRoutes.search, arguments: controller),
+              hint: 'Insira o nome do anime',
+            ).hero('search'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildReleases() {
+    var qtd = ((context.width - 40) / 230).floor().abs();
+    if (qtd > 6) {
+      qtd = 6;
+    }
+    return [
+      SliverPadding(
+        padding: const EdgeInsets.only(right: 20, left: 20, bottom: 10, top: 20),
+        sliver: SliverList.list(
+          children: const [
+            Text(
+              '🔥 Lançamentos',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
-          ),
-          const Gap(10),
-          SizedBox(
-            height: 200,
-            child: Builder(
-              builder: (context) {
-                if (_cubit.releasesLoading) {
-                  return ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, __) => const ShimmedBox(
-                      height: 200,
-                      width: 200,
-                    ),
-                    separatorBuilder: (_, __) => const Gap(10),
-                    itemCount: 10,
-                  );
-                } else if (_cubit.releases.isNotEmpty) {
-                  return ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, index) => SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: EpisodeItem(anime: _cubit.releases[index]),
-                    ),
-                    separatorBuilder: (_, __) => const Gap(10),
-                    itemCount: _cubit.releases.length,
-                  );
-                }
-                return const Center(
-                  child: Loader(),
-                );
-              },
-            ),
-          ),
-        ],
-      );
+          ],
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+        sliver: SliverGrid.count(
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          crossAxisCount: qtd,
+          childAspectRatio: 1.3 / 1,
+          children: [
+            if (_cubit.releasesLoading)
+              ...List.generate(
+                qtd * 3,
+                (index) => const ShimmedBox(),
+              )
+            else
+              ..._cubit.releases
+                  .map(
+                    (e) => EpisodeItem(episode: e),
+                  )
+                  .toList(),
+          ],
+        ),
+      ),
+    ];
+  }
 }

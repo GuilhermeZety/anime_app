@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:gap/gap.dart';
 
@@ -22,96 +23,101 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-      decoration: BoxDecoration(
-        color: AppColors.grey_600,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10,
-            offset: Offset(0, -1),
+    return BlocBuilder(
+      bloc: _cubit,
+      builder: (context, state) {
+        return Container(
+          height: 70,
+          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          decoration: BoxDecoration(
+            color: AppColors.grey_600,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, -1),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Gap(5),
-          LayoutBuilder(
-            builder: (context, constraits) {
-              return Row(
-                children: [
-                  AnimatedContainer(
-                    duration: 200.ms,
-                    height: 3,
-                    margin: EdgeInsets.only(
-                      left: (((constraits.maxWidth / qtdItens) * (_cubit.controller.index + 1)) - (constraits.maxWidth / qtdItens) / 2) - 15,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.pink_400,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    width: 30,
-                  ),
-                ],
-              );
-            },
-          ).expanded(),
-          LayoutBuilder(
-            builder: (context, constraits) {
-              var width = constraits.maxWidth / qtdItens - 3;
-              return SeparatedRow(
-                separatorBuilder: () => const Gap(4),
-                children: [
-                  BottomBarItem(
-                    selected: _cubit.controller.index == 0,
-                    ontap: () {
-                      _cubit.controller.animateTo(0);
-                      if (mounted) setState(() {});
-                    },
-                    icon: Icons.home_rounded,
-                    name: 'Inicio',
-                    width: width,
-                  ),
-                  BottomBarItem(
-                    selected: _cubit.controller.index == 1,
-                    icon: Icons.favorite_rounded,
-                    name: 'Favoritos',
-                    ontap: () {
-                      _cubit.controller.animateTo(1);
-                      if (mounted) setState(() {});
-                    },
-                    width: width,
-                  ),
-                  BottomBarItem(
-                    icon: Icons.history_rounded,
-                    selected: _cubit.controller.index == 2,
-                    name: 'Histórico',
-                    ontap: () {
-                      _cubit.controller.animateTo(2);
-                      if (mounted) setState(() {});
-                    },
-                    width: width,
-                  ),
-                  BottomBarItem(
-                    selected: _cubit.controller.index == 3,
-                    icon: Icons.person,
-                    name: 'Perfil',
-                    ontap: () {
-                      _cubit.controller.animateTo(3);
-                      if (mounted) setState(() {});
-                    },
-                    width: width,
-                  ),
-                ],
-              );
-            },
+          child: Column(
+            children: [
+              const Gap(5),
+              LayoutBuilder(
+                builder: (context, constraits) {
+                  return Row(
+                    children: [
+                      AnimatedContainer(
+                        duration: 200.ms,
+                        height: 3,
+                        margin: EdgeInsets.only(
+                          left: (((constraits.maxWidth / qtdItens) * (_cubit.controller.index + 1)) - (constraits.maxWidth / qtdItens) / 2) - 15,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.pink_400,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        width: 30,
+                      ),
+                    ],
+                  );
+                },
+              ).expanded(),
+              LayoutBuilder(
+                builder: (context, constraits) {
+                  var width = constraits.maxWidth / qtdItens - 3;
+                  return SeparatedRow(
+                    separatorBuilder: () => const Gap(4),
+                    children: [
+                      BottomBarItem(
+                        selected: _cubit.controller.index == 0,
+                        ontap: () {
+                          _cubit.controller.animateTo(0);
+                          if (mounted) setState(() {});
+                        },
+                        icon: Icons.home_rounded,
+                        name: 'Inicio',
+                        width: width,
+                      ),
+                      BottomBarItem(
+                        selected: _cubit.controller.index == 1,
+                        icon: Icons.favorite_rounded,
+                        name: 'Favoritos',
+                        ontap: () {
+                          _cubit.controller.animateTo(1);
+                          if (mounted) setState(() {});
+                        },
+                        width: width,
+                      ),
+                      BottomBarItem(
+                        icon: Icons.history_rounded,
+                        selected: _cubit.controller.index == 2,
+                        name: 'Histórico',
+                        ontap: () {
+                          _cubit.controller.animateTo(2);
+                          if (mounted) setState(() {});
+                        },
+                        width: width,
+                      ),
+                      BottomBarItem(
+                        selected: _cubit.controller.index == 3,
+                        icon: Icons.person,
+                        name: 'Perfil',
+                        ontap: () {
+                          _cubit.controller.animateTo(3);
+                          if (mounted) setState(() {});
+                        },
+                        width: width,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const Gap(3),
+            ],
           ),
-          const Gap(3),
-        ],
-      ),
+        );
+      },
     );
   }
 }

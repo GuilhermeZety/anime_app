@@ -5,5 +5,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class AnimeRepository {
   Future<Either<Failure, List<AnimeEntity>>> search(String value);
-  Future<Either<Failure, List<EpisodeEntity>>> getReleases();
+  Future<Either<Failure, Stream<List<EpisodeEntity>>>> getReleases();
 }

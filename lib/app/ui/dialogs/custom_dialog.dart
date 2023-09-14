@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/utils/custom_dialog_utils.dart';
@@ -39,7 +41,76 @@ class CustomDialog extends StatefulWidget {
 }
 
 class _CustomDialogState extends State<CustomDialog> {
-  Widget _content(BuildContext context) => SafeArea(
+  Container _content() => Container(
+        margin: widget.margin,
+        constraints: const BoxConstraints(
+          maxWidth: 600,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.grey_600,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.top != null) ...[
+              Container(
+                padding: const EdgeInsets.only(
+                  bottom: 10,
+                  left: 30,
+                  right: 30,
+                  top: 20,
+                ),
+                child: widget.top!,
+              ),
+            ],
+            Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(
+                    left: 30,
+                    right: 30,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: AppColors.grey_600,
+                  ),
+                  constraints: BoxConstraints(
+                    maxHeight: (context.height * 0.9) - (widget.bottom != null ? widget.bottomSize : 0) - (widget.top != null ? widget.topSize : 0),
+                  ),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: widget.child,
+                  ),
+                ),
+              ),
+            ),
+            if (widget.bottom != null)
+              Container(
+                padding: const EdgeInsets.only(
+                  bottom: 20,
+                  left: 30,
+                  right: 30,
+                  top: 10,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.grey_600,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: widget.bottom!,
+              ),
+          ],
+        ),
+      );
+
+  Widget _buildContent(BuildContext context) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return SafeArea(
         child: GestureDetector(
           onTap: () {
             if (widget.dimissAction != null) {
@@ -56,64 +127,7 @@ class _CustomDialogState extends State<CustomDialog> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(
-                  child: Container(
-                    margin: widget.margin,
-                    decoration: BoxDecoration(
-                      color: AppColors.grey_600,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (widget.top != null) ...[
-                          Container(
-                            padding: const EdgeInsets.only(
-                              bottom: 10,
-                              left: 30,
-                              right: 30,
-                              top: 20,
-                            ),
-                            child: widget.top!,
-                          ),
-                        ],
-                        Flexible(
-                          child: GestureDetector(
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                left: 30,
-                                right: 30,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.grey_600,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              constraints: BoxConstraints(
-                                maxHeight: (context.height * 0.9) - (widget.bottom != null ? widget.bottomSize : 0) - (widget.top != null ? widget.topSize : 0),
-                              ),
-                              child: SingleChildScrollView(
-                                physics: const BouncingScrollPhysics(),
-                                child: widget.child,
-                              ),
-                            ),
-                          ),
-                        ),
-                        if (widget.bottom != null)
-                          Container(
-                            padding: const EdgeInsets.only(
-                              bottom: 20,
-                              left: 30,
-                              right: 30,
-                              top: 10,
-                            ),
-                            color: AppColors.grey_600,
-                            child: widget.bottom!,
-                          ),
-                      ],
-                    ),
-                  ),
+                  child: _content(),
                 ),
                 Gap(MediaQuery.viewInsetsOf(context).bottom),
               ],
@@ -121,9 +135,13 @@ class _CustomDialogState extends State<CustomDialog> {
           ),
         ),
       );
+    }
+
+    return _content();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return _content(context);
+    return _buildContent(context);
   }
 }

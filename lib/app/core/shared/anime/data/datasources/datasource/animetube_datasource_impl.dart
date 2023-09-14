@@ -1,5 +1,6 @@
 import 'package:anime_app/app/core/common/integrations/animetube.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
+import 'package:anime_app/app/core/common/utils/utils.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/anime_datasource.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/episode_model.dart';
@@ -67,15 +68,20 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
 
       for (var ep in items) {
         var image = ep.querySelector('img');
-
         var imageURL = image?.attributes['src']?.split('/') ?? [];
-
         var uuid = imageURL[imageURL.length - 2];
+
+        var date = ep.querySelector('.epi_loop_img_data');
+        var duration = ep.querySelector('.epi_loop_img_time');
+
+        var episode = ep.querySelector('.epi_loop_nome_sub')?.text;
 
         episodes.add(
           EpisodeModel(
             uuid: uuid,
-            episode: 0,
+            episode: episode != null ? Utils.extractInt(episode) ?? 0 : 0,
+            duration: duration?.text,
+            uploadDate: date?.text,
             name: image?.attributes['title'],
             image: image?.attributes['src'],
           ),

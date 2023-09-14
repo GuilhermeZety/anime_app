@@ -23,9 +23,18 @@ class InitialCubit extends Cubit<InitialState> {
       releasesLoading = true;
       setState();
     }
-    releases = await Modular.get<GetReleases>()(NoParams()).then((value) => value.fold((l) => <EpisodeEntity>[], (r) => r));
-    releasesLoading = false;
-    setState();
+    var stream = await Modular.get<GetReleases>()(NoParams()).then(
+      (value) => value.fold(
+        (l) => const Stream<List<EpisodeEntity>>.empty(),
+        (r) => r,
+      ),
+    );
+
+    stream.listen((event) {
+      releases = event;
+      releasesLoading = false;
+      setState();
+    });
   }
 
   void setState() {

@@ -1,5 +1,6 @@
 import 'package:anime_app/app/core/common/errors/failures.dart';
 import 'package:anime_app/app/core/common/services/treater/treater_service.dart';
+import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/anime_datasource.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/episode_model.dart';
@@ -24,12 +25,25 @@ class AnimeRepositoryImpl extends AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<EpisodeModel>>> getReleases() {
-    return TreaterService()<List<EpisodeModel>>(
+  Future<Either<Failure, Stream<List<EpisodeModel>>>> getReleases() {
+    return TreaterService()<Stream<List<EpisodeModel>>>(
       () async {
-        return await datasource.getReleases();
+        return streamReleases();
       },
       errorIdentification: 'Erro ao buscar o lançamentos',
     );
+  }
+
+  Stream<List<EpisodeModel>> streamReleases() async* {
+    var cachedReleases = AnimeLogic.getAllReleases();
+
+    if (cachedReleases.isNotEmpty) {
+      yield cachedReleases;
+    }
+
+    var releases = await datasource.getReleases();
+    await AnimeLogic.setAllReleases(releases);
+
+    yield releases;
   }
 }

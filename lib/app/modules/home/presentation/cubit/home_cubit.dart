@@ -7,7 +7,14 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
+  int lastIndex = 0;
   late TabController controller;
 
-  void init() {}
+  void onTabControllerChange() {
+    if (controller.index != lastIndex) {
+      lastIndex = controller.index;
+      emit(HomeSetState());
+      emit(HomeInitial());
+    }
+  }
 }

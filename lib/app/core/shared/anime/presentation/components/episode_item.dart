@@ -3,13 +3,14 @@ import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
+import 'package:anime_app/app/ui/components/tag.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class EpisodeItem extends StatefulWidget {
-  const EpisodeItem({super.key, required this.anime});
+  const EpisodeItem({super.key, required this.episode});
 
-  final EpisodeEntity anime;
+  final EpisodeEntity episode;
 
   @override
   State<EpisodeItem> createState() => _EpisodeItemState();
@@ -40,8 +41,8 @@ class _EpisodeItemState extends State<EpisodeItem> {
         },
         child: Center(
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            transform: hooved ? (Matrix4.identity()..scale(0.96)) : Matrix4.identity(),
+            duration: const Duration(milliseconds: 200),
+            transform: hooved ? (Matrix4.identity()..scale(0.98)) : Matrix4.identity(),
             child: Column(
               children: [
                 ClipRRect(
@@ -50,8 +51,8 @@ class _EpisodeItemState extends State<EpisodeItem> {
                     children: [
                       Positioned.fill(
                         child: Padding(
-                          padding: const EdgeInsets.all(0.1),
-                          child: ImageCached(url: widget.anime.image ?? ''),
+                          padding: const EdgeInsets.all(1),
+                          child: ImageCached(url: widget.episode.image ?? ''),
                         ),
                       ),
                       Positioned.fill(
@@ -78,6 +79,21 @@ class _EpisodeItemState extends State<EpisodeItem> {
                           ),
                         ),
                       ),
+                      if (widget.episode.duration != null)
+                        Positioned(
+                          left: 10,
+                          top: 10,
+                          child: Tag(
+                            text: widget.episode.duration!,
+                          ),
+                        ),
+                      Positioned(
+                        right: 10,
+                        top: 10,
+                        child: Tag(
+                          text: 'EP ${widget.episode.episode}',
+                        ),
+                      ),
                     ],
                   ),
                 ).expanded(),
@@ -88,11 +104,11 @@ class _EpisodeItemState extends State<EpisodeItem> {
                       10,
                     ),
                     child: AutoSizeText(
-                      widget.anime.name ?? '',
+                      widget.episode.name ?? '',
                       maxLines: 2,
                       style: TextStyle(
                         overflow: TextOverflow.ellipsis,
-                        color: Colors.white,
+                        color: AppColors.grey_200,
                         fontSize: context.isLandscape ? 14 : 12,
                       ),
                     ),

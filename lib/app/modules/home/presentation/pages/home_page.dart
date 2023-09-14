@@ -24,7 +24,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     _cubit.controller = TabController(length: 4, vsync: this);
+
+    _cubit.controller.addListener(_cubit.onTabControllerChange);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _cubit.controller.removeListener(_cubit.onTabControllerChange);
+    super.dispose();
   }
 
   @override
