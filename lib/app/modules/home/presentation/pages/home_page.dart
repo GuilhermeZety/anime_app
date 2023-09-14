@@ -1,7 +1,9 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
+import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/modules/home/presentation/components/bottom_bar.dart';
 import 'package:anime_app/app/modules/home/presentation/components/home_appbar.dart';
+import 'package:anime_app/app/modules/home/presentation/components/home_drawer.dart';
 import 'package:anime_app/app/modules/home/presentation/cubit/home_cubit.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/calendar/calendar_page.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/favorites/favorites_page.dart';
@@ -47,9 +49,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           if (context.isLandscape) {
             return ScaffoldGradientBackground(
               gradient: AppColors.backgrondGradient,
-              drawer: const Drawer(),
-              appBar: const HomeAppbar(),
-              body: _content,
+              body: Row(
+                children: [
+                  const HomeDrawer(),
+                  _content.expanded(),
+                ],
+              ),
             );
           }
           return ScaffoldGradientBackground(

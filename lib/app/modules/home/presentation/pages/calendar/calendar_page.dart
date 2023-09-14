@@ -5,7 +5,7 @@ import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/calendar_entity.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/components/calendar_item.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/calendar/cubit/calendar_cubit.dart';
-import 'package:anime_app/app/ui/components/shimed_box.dart';
+import 'package:anime_app/app/ui/components/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -33,7 +33,7 @@ class _CalendarPageState extends State<CalendarPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return BlocBuilder<CalendarCubit, CalendarState>(
       bloc: cubit,
       builder: (context, state) {
         return LayoutBuilder(
@@ -45,7 +45,7 @@ class _CalendarPageState extends State<CalendarPage> with SingleTickerProviderSt
                   _buildTitle(),
                   _buildSubTitle(),
                   _buildTabBar(),
-                  _buildTabView().expanded(),
+                  _buildTabView(state).expanded(),
                   // _buildTabView(),
                   // _buildAnimes(),
                 ],
@@ -120,19 +120,28 @@ class _CalendarPageState extends State<CalendarPage> with SingleTickerProviderSt
           ],
         ),
       );
-  Widget _buildTabView() => Padding(
+  Widget _buildTabView(CalendarState state) => Padding(
         padding: const EdgeInsets.only(right: 30, left: 30, bottom: 20, top: 0),
         child: TabBarView(
           controller: tabController,
           children: [
-            _buildGridCalendarAnimes(cubit.calendar?.sunday),
-            _buildGridCalendarAnimes(cubit.calendar?.monday),
-            _buildGridCalendarAnimes(cubit.calendar?.tuesday),
-            _buildGridCalendarAnimes(cubit.calendar?.wednesday),
-            _buildGridCalendarAnimes(cubit.calendar?.thursday),
-            _buildGridCalendarAnimes(cubit.calendar?.friday),
-            _buildGridCalendarAnimes(cubit.calendar?.saturday),
-            _buildGridCalendarAnimes(cubit.calendar?.undefined),
+            if (state is CalendarLoading) ...[
+              ...List.generate(
+                8,
+                (index) => const Center(
+                  child: Loader(),
+                ),
+              ),
+            ] else ...[
+              _buildGridCalendarAnimes(cubit.calendar?.sunday),
+              _buildGridCalendarAnimes(cubit.calendar?.monday),
+              _buildGridCalendarAnimes(cubit.calendar?.tuesday),
+              _buildGridCalendarAnimes(cubit.calendar?.wednesday),
+              _buildGridCalendarAnimes(cubit.calendar?.thursday),
+              _buildGridCalendarAnimes(cubit.calendar?.friday),
+              _buildGridCalendarAnimes(cubit.calendar?.saturday),
+              _buildGridCalendarAnimes(cubit.calendar?.undefined),
+            ],
           ],
         ),
       );
@@ -145,37 +154,15 @@ class _CalendarPageState extends State<CalendarPage> with SingleTickerProviderSt
     if (qtd == 0) {
       qtd = 1;
     }
-    return GridView.count(
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      crossAxisCount: qtd,
-      childAspectRatio: 1.3 / 1,
-      children: [
-        if (list == null)
-          ...List.generate(
-            qtd * 3,
-            (index) => Column(
-              children: [
-                const ShimmedBox().expanded(),
-                const Gap(10),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: SizedBox(
-                    height: 30,
-                    child: ShimmedBox(),
-                  ),
-                ),
-                const Gap(10),
-              ],
-            ),
-          )
-        else
-          ...list
-              .map(
-                (e) => CalendarItem(anime: e),
-              )
-              .toList(),
-      ],
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: qtd,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 0.6,
+      ),
+      itemCount: list?.length ?? 0,
+      itemBuilder: (_, index) => CalendarItem(anime: list![index]),
     );
   }
 }

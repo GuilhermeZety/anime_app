@@ -12,26 +12,13 @@ part 'calendar_state.dart';
 class CalendarCubit extends Cubit<CalendarState> {
   CalendarCubit() : super(CalendarInitial());
 
-  bool loading = false;
-
   CalendarEntity? calendar;
 
   Future init() async {
     if (calendar == null) {
-      loading = true;
-      setState();
+      emit(CalendarLoading());
     }
     calendar = await Modular.get<GetCalendar>()(NoParams()).then((value) => value.fold((l) => null, (r) => r));
-    setState();
-  }
-
-  void setState() {
-    if (state is CalendarSetState) {
-      emit(CalendarSetState());
-    } else {
-      emit(CalendarInitial());
-      emit(CalendarSetState());
-    }
     emit(CalendarInitial());
   }
 }

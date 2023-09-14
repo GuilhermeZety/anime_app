@@ -1,5 +1,4 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
-import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/ui/dialogs/coming_soon_modal.dart';
 import 'package:flutter/material.dart';
 
@@ -28,40 +27,21 @@ class _HomeAppbarState extends State<HomeAppbar> {
         padding: const EdgeInsets.only(left: 20, top: 10),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            if (context.isLandscape) {
-              return Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    icon: const Icon(
-                      Icons.menu_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              );
-            }
-            return Row(
-              children: [
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () {
-                      ComingSoonModal.show(context);
-                    },
-                    child: Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(1000),
-                        color: Colors.white.withOpacity(0.2),
-                      ),
-                    ),
+            return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  ComingSoonModal.show(context);
+                },
+                child: Container(
+                  width: 45,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(1000),
+                    color: Colors.white.withOpacity(0.2),
                   ),
                 ),
-              ],
+              ),
             );
           },
         ),

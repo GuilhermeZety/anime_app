@@ -9,4 +9,4 @@ sealed class CalendarState extends Equatable {
 
 final class CalendarInitial extends CalendarState {}
 
-final class CalendarSetState extends CalendarState {}
+final class CalendarLoading extends CalendarState {}
