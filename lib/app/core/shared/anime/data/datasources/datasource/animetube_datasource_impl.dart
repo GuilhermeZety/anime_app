@@ -1,19 +1,21 @@
-import 'package:anime_app/app/core/common/integrations/animetube.dart';
+import 'package:anime_app/app/core/common/integrations/integration.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/common/utils/utils.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/anime_datasource.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/calendar_item_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/episode_model.dart';
+import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 class AnimetubeDatasourceImpl extends AnimeDatasource {
   final RequestService requestService;
+  final Integration integration;
 
   AnimetubeDatasourceImpl({
     required this.requestService,
+    required this.integration,
   });
-
-  Animetube integration = Animetube();
 
   @override
   Future<List<AnimeModel>> search(String value) async {
@@ -40,12 +42,59 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
   }
 
   @override
-  Future<List<EpisodeModel>> getReleases() async {
-    await Future.delayed(const Duration(seconds: 2));
-    //TODO: IMPLEMENT THIS RELEASES GET
-
+  Future<CalendarModel> getCalendar() async {
     final response = await requestService.get(
-      integration.releases(),
+      integration.calendar,
+    );
+    if (response.data != null && response.data is String) {
+      var document = parse(response.data);
+
+      return CalendarModel(
+        sunday: _getListCalendarItem(document.querySelectorAll('#p1 .ani_loop_item')),
+        monday: _getListCalendarItem(document.querySelectorAll('#p2 .ani_loop_item')),
+        tuesday: _getListCalendarItem(document.querySelectorAll('#p3 .ani_loop_item')),
+        wednesday: _getListCalendarItem(document.querySelectorAll('#p4 .ani_loop_item')),
+        thursday: _getListCalendarItem(document.querySelectorAll('#p5 .ani_loop_item')),
+        friday: _getListCalendarItem(document.querySelectorAll('#p6 .ani_loop_item')),
+        saturday: _getListCalendarItem(document.querySelectorAll('#p7 .ani_loop_item')),
+        undefined: _getListCalendarItem(document.querySelectorAll('#p8 .ani_loop_item')),
+      );
+    }
+
+    throw Exception('Erro ao buscar o calendario');
+  }
+
+  List<CalendarAnimeModel> _getListCalendarItem(List<Element> elements) {
+    List<CalendarAnimeModel> items = [];
+    for (var anime in elements) {
+      var name = anime.querySelector('.ani_loop_item_infos_nome');
+      var image = anime.querySelector('.ani_loop_item_img img');
+      var type = anime.querySelector('.epi_loop_img_data');
+      var date = anime.querySelector('.epi_loop_img_time');
+      var uuid = '';
+
+      var imageURL = image?.attributes['src']?.split('/') ?? [];
+      if (imageURL.length > 3) {
+        uuid = imageURL[imageURL.length - 2];
+      }
+
+      items.add(
+        CalendarAnimeModel(
+          uuid: uuid,
+          image: image?.attributes['src'],
+          name: name?.text ?? '',
+          type: type?.text,
+          date: date?.text,
+        ),
+      );
+    }
+    return items;
+  }
+
+  @override
+  Future<List<EpisodeModel>> getReleases() async {
+    final response = await requestService.get(
+      integration.releases,
     );
 
     if (response.data != null && response.data is String) {

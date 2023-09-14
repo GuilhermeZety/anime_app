@@ -3,6 +3,7 @@ import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/modules/home/presentation/components/bottom_bar.dart';
 import 'package:anime_app/app/modules/home/presentation/components/home_appbar.dart';
 import 'package:anime_app/app/modules/home/presentation/cubit/home_cubit.dart';
+import 'package:anime_app/app/modules/home/presentation/pages/calendar/calendar_page.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/favorites/favorites_page.dart';
 import 'package:anime_app/app/modules/home/presentation/pages/initial/initial_page.dart';
 import 'package:anime_app/app/ui/components/coming_soon.dart';
@@ -40,11 +41,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     return WillPopScope(
       onWillPop: () async => false,
-      child: BlocConsumer<HomeCubit, HomeState>(
+      child: BlocBuilder<HomeCubit, HomeState>(
         bloc: _cubit,
-        listener: (context, state) {
-          // TODO: implement listener
-        },
         builder: (context, state) {
           if (context.isLandscape) {
             return ScaffoldGradientBackground(
@@ -70,7 +68,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         children: const [
           InitialPage(),
           FavoritesPage(),
-          Center(child: ComingSoon()),
+          CalendarPage(),
           Center(child: ComingSoon()),
         ],
       );

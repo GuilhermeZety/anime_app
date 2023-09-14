@@ -18,7 +18,7 @@ class Tag extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.grey_200,
           fontSize: 12,
         ),
       ),

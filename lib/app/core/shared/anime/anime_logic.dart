@@ -6,6 +6,7 @@ import 'package:anime_app/app/core/shared/anime/data/repositories/anime_reposito
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
+import 'package:anime_app/app/core/shared/anime/domain/usecases/get_calendar.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/search_anime.dart';
 import 'package:anime_app/main.dart';
@@ -17,6 +18,7 @@ class AnimeLogic {
       () => AnimeRepositoryImpl(
         datasource: AnimetubeDatasourceImpl(
           requestService: i.get(),
+          integration: i.get(),
         ),
       ),
     );
@@ -27,6 +29,11 @@ class AnimeLogic {
     );
     i.addLazySingleton<GetReleases>(
       () => GetReleases(
+        repository: i.get<AnimeRepository>(),
+      ),
+    );
+    i.addLazySingleton<GetCalendar>(
+      () => GetCalendar(
         repository: i.get<AnimeRepository>(),
       ),
     );

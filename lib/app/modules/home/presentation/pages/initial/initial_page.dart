@@ -33,12 +33,19 @@ class _InitialPageState extends State<InitialPage> {
     return BlocBuilder(
       bloc: _cubit,
       builder: (context, state) {
-        return CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            _buildSearch(),
-            ..._buildReleases(),
-          ],
+        return RefreshIndicator(
+          onRefresh: () async {
+            await _cubit.refresh();
+          },
+          backgroundColor: AppColors.pink_400,
+          color: AppColors.grey_600,
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              _buildSearch(),
+              ..._buildReleases(),
+            ],
+          ),
         );
       },
     );
@@ -73,9 +80,12 @@ class _InitialPageState extends State<InitialPage> {
   }
 
   List<Widget> _buildReleases() {
-    var qtd = ((context.width - 40) / 230).floor().abs();
+    var qtd = ((context.width - 40) / 210).floor().abs();
     if (qtd > 6) {
       qtd = 6;
+    }
+    if (qtd == 0) {
+      qtd = 1;
     }
     return [
       SliverPadding(

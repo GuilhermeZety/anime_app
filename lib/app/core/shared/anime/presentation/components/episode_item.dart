@@ -36,6 +36,18 @@ class _EpisodeItemState extends State<EpisodeItem> {
         if (mounted) setState(() {});
       },
       child: GestureDetector(
+        onTapDown: (_) {
+          hooved = true;
+          if (mounted) setState(() {});
+        },
+        onTapUp: (_) {
+          hooved = false;
+          if (mounted) setState(() {});
+        },
+        onTapCancel: () {
+          hooved = false;
+          if (mounted) setState(() {});
+        },
         onTap: () {
           //TODO: logic to access Episode
         },
@@ -109,6 +121,7 @@ class _EpisodeItemState extends State<EpisodeItem> {
                       style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         color: AppColors.grey_200,
+                        fontWeight: FontWeight.bold,
                         fontSize: context.isLandscape ? 14 : 12,
                       ),
                     ),

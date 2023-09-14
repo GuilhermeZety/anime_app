@@ -1,3 +1,5 @@
+import 'package:anime_app/app/core/common/integrations/animetube.dart';
+import 'package:anime_app/app/core/common/integrations/integration.dart';
 import 'package:anime_app/app/core/common/services/connection/connection_service.dart';
 import 'package:anime_app/app/core/common/services/connection/ping_connection_service_impl.dart';
 import 'package:anime_app/app/core/common/services/requests/dio_request_service.dart';
@@ -18,6 +20,7 @@ class AppModule extends Module {
   void binds(Injector i) {
     i.addSingleton<ConnectionService>(() => PingConnectionServiceImpl());
     i.addSingleton<RequestService>(() => DioRequestService());
+    i.addSingleton<Integration>(() => Anitube());
     AnimeLogic.binds(i);
   }
 

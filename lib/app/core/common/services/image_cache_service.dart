@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -21,7 +22,7 @@ class ImageCacheService {
         return Uint8List.fromList(response.data);
       }
     } catch (e) {
-      print(e);
+      log(e.toString(), name: 'ImageCacheService', error: e);
     }
     return null;
   }

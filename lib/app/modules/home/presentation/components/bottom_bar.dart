@@ -28,7 +28,7 @@ class _BottomBarState extends State<BottomBar> {
       builder: (context, state) {
         return Container(
           height: 70,
-          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           decoration: BoxDecoration(
             color: AppColors.grey_600,
             borderRadius: BorderRadius.circular(20),
@@ -90,9 +90,9 @@ class _BottomBarState extends State<BottomBar> {
                         width: width,
                       ),
                       BottomBarItem(
-                        icon: Icons.history_rounded,
+                        icon: Icons.calendar_month,
                         selected: _cubit.controller.index == 2,
-                        name: 'Histórico',
+                        name: 'Calendário',
                         ontap: () {
                           _cubit.controller.animateTo(2);
                           if (mounted) setState(() {});

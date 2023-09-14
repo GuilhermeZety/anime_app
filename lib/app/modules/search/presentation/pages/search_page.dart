@@ -53,14 +53,16 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return ScaffoldGradientBackground(
       gradient: AppColors.backgrondGradient,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            _buildSearch(),
-            if (animes.isNotEmpty || loading == true) _buildAnimes() else _buildNoResults(),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              _buildSearch(),
+              if (animes.isNotEmpty || loading == true) _buildAnimes() else _buildNoResults(),
+            ],
+          ),
         ),
       ),
     );
@@ -122,9 +124,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildAnimes() {
-    var qtd = ((context.width - 40) / 180).floor().abs();
+    var qtd = ((context.width - 40) / 150).floor().abs();
     if (qtd > 6) {
       qtd = 6;
+    }
+    if (qtd == 0) {
+      qtd = 1;
     }
     return SliverPadding(
       padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 20),

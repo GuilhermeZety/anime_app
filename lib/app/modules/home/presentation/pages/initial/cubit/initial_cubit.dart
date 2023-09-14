@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anime_app/app/core/common/features/usecases/usecase.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
@@ -14,8 +16,17 @@ class InitialCubit extends Cubit<InitialState> {
 
   List<EpisodeEntity> releases = [];
 
-  void init() {
-    getReleases();
+  StreamSubscription? _streamSubscriptionReleases;
+
+  Future init() async {
+    await getReleases();
+  }
+
+  Future refresh() async {
+    _streamSubscriptionReleases?.cancel();
+    releases = [];
+
+    await getReleases();
   }
 
   Future getReleases() async {
@@ -30,7 +41,7 @@ class InitialCubit extends Cubit<InitialState> {
       ),
     );
 
-    stream.listen((event) {
+    _streamSubscriptionReleases = stream.listen((event) {
       releases = event;
       releasesLoading = false;
       setState();

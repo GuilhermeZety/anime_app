@@ -4,6 +4,7 @@ import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/components/anime_item.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
@@ -45,18 +46,50 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
+        _buildTitle(),
         _buildAnimes(),
       ],
     );
   }
 
+  Widget _buildTitle() => SliverPadding(
+        padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 0),
+        sliver: SliverList.list(
+          children: const [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.favorite,
+                      color: AppColors.pink_400,
+                      size: 20,
+                    ),
+                    Gap(5),
+                    Text(
+                      'Favoritos',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
   Widget _buildAnimes() {
-    var qtd = ((context.width - 40) / 180).floor().abs();
+    var qtd = ((context.width - 40) / 150).floor().abs();
     if (qtd > 6) {
       qtd = 6;
     }
+    if (qtd == 0) {
+      qtd = 1;
+    }
     return SliverPadding(
-      padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 20),
+      padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 0),
       sliver: SliverGrid.count(
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,

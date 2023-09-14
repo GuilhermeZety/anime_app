@@ -10,7 +10,7 @@ class HomeAppbar extends StatefulWidget implements PreferredSizeWidget {
   State<HomeAppbar> createState() => _HomeAppbarState();
 
   @override
-  Size get preferredSize => const Size(double.infinity, 100);
+  Size get preferredSize => const Size(double.infinity, 80);
 }
 
 class _HomeAppbarState extends State<HomeAppbar> {
@@ -25,7 +25,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
       backgroundColor: Colors.transparent,
       leadingWidth: 200,
       leading: Padding(
-        padding: const EdgeInsets.only(left: 30, top: 10),
+        padding: const EdgeInsets.only(left: 20, top: 10),
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (context.isLandscape) {
@@ -68,7 +68,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 30, top: 10),
+          padding: const EdgeInsets.only(right: 20, top: 10),
           child: Row(
             children: [
               MouseRegion(

@@ -106,7 +106,7 @@ class _AnimeItemState extends State<AnimeItem> {
                           if (favorited) {
                             return const Icon(
                               Icons.favorite,
-                              color: AppColors.red_400,
+                              color: AppColors.pink_400,
                             );
                           }
                           return const Icon(
