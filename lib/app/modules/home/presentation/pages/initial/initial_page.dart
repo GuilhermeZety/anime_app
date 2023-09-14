@@ -4,6 +4,7 @@ import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/common/features/usecases/usecase.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
+import 'package:anime_app/app/modules/home/presentation/pages/initial/cubit/initial_cubit.dart';
 import 'package:anime_app/app/ui/components/input.dart';
 import 'package:anime_app/app/ui/components/loader.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
@@ -21,6 +22,9 @@ class InitialPage extends StatefulWidget {
 
 class _InitialPageState extends State<InitialPage> {
   TextEditingController controller = TextEditingController();
+
+  InitialCubit _cubit = Modular.get<InitialCubit>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
