@@ -58,7 +58,7 @@ class _CalendarPageState extends State<CalendarPage> with SingleTickerProviderSt
   }
 
   Widget _buildTitle() => const Padding(
-        padding: EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 0),
+        padding: EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -90,52 +90,54 @@ class _InputSearchState extends State<InputSearch> {
       children: [
         Material(
           color: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.label != null) ...[
-                Text(widget.label!, style: const TextStyle(fontWeight: FontWeight.bold)),
-                const Gap(5),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.label != null) ...[
+                  Text(widget.label!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const Gap(5),
+                ],
+                TextFormField(
+                  key: widget.key,
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  controller: widget.controller,
+                  autovalidateMode: widget.autovalidateMode,
+                  validator: widget.validation,
+                  inputFormatters: widget.formatter,
+                  keyboardType: widget.keyboard,
+                  minLines: widget.minLines,
+                  maxLines: widget.maxLines ?? 1,
+                  readOnly: widget.readOnly,
+                  obscureText: widget.keyboard == TextInputType.visiblePassword ? !visible : false,
+                  onChanged: (_) {
+                    widget.onChange?.call(_);
+                    search();
+                  },
+                  onTap: widget.onTap,
+                  focusNode: widget.focusNode,
+                  style: TextStyle(
+                    color: AppColors.grey_200.withOpacity(0.8),
+                    fontSize: 18,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    errorMaxLines: 2,
+                    prefixIcon: widget.prefixIcon,
+                    hintText: widget.hint,
+                    suffixIcon: searchTimer?.isActive == true
+                        ? const Loader(
+                            size: 20,
+                          )
+                        : null,
+                    suffixIconColor: AppColors.pink_400,
+                  ),
+                ),
               ],
-              TextFormField(
-                key: widget.key,
-                onTapOutside: (event) {
-                  FocusScope.of(context).unfocus();
-                },
-                controller: widget.controller,
-                autovalidateMode: widget.autovalidateMode,
-                validator: widget.validation,
-                inputFormatters: widget.formatter,
-                keyboardType: widget.keyboard,
-                minLines: widget.minLines,
-                maxLines: widget.maxLines ?? 1,
-                readOnly: widget.readOnly,
-                obscureText: widget.keyboard == TextInputType.visiblePassword ? !visible : false,
-                onChanged: (_) {
-                  widget.onChange?.call(_);
-                  search();
-                },
-                onTap: widget.onTap,
-                focusNode: widget.focusNode,
-                style: TextStyle(
-                  color: AppColors.grey_200.withOpacity(0.8),
-                  fontSize: 18,
-                ),
-                decoration: InputDecoration(
-                  filled: true,
-                  errorMaxLines: 2,
-                  prefixIcon: widget.prefixIcon,
-                  hintText: widget.hint,
-                  suffixIcon: searchTimer?.isActive == true
-                      ? const Loader(
-                          size: 20,
-                        )
-                      : null,
-                  suffixIconColor: AppColors.pink_400,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ],

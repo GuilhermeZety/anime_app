@@ -87,7 +87,7 @@ class _CalendarItemState extends State<CalendarItem> {
                             ///TODO: set favorite
 
                             // await AnimeLogic.setFavoriteCalendar(widget.anime);
-                            // favorited = !favorited;
+                            // favorited = !favorsited;
                             // if (mounted) setState(() {});
                           },
                           child: Builder(

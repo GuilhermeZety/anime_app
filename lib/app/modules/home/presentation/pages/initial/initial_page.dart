@@ -80,7 +80,7 @@ class _InitialPageState extends State<InitialPage> {
   }
 
   List<Widget> _buildReleases() {
-    var qtd = ((context.width - 40) / 210).floor().abs();
+    var qtd = ((context.width - 40) / (context.isLandscape ? 250 : 210)).floor().abs();
     if (qtd > 6) {
       qtd = 6;
     }
@@ -108,7 +108,7 @@ class _InitialPageState extends State<InitialPage> {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
           crossAxisCount: qtd,
-          childAspectRatio: 1.3 / 1,
+          childAspectRatio: context.isLandscape ? 1.1 / 1 : 1.3 / 1,
           children: [
             if (_cubit.releasesLoading)
               ...List.generate(

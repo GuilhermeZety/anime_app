@@ -11,6 +11,7 @@ import 'package:anime_app/app/modules/home/presentation/pages/initial/initial_pa
 import 'package:anime_app/app/ui/components/coming_soon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               gradient: AppColors.backgrondGradient,
               body: Row(
                 children: [
-                  const HomeDrawer(),
+                  const HomeDrawer().animate().slideX(begin: -0.8, end: 0),
                   _content.expanded(),
                 ],
               ),

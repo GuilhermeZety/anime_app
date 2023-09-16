@@ -53,7 +53,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   Widget _buildTitle() => SliverPadding(
-        padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 0),
+        padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 20),
         sliver: SliverList.list(
           children: const [
             Row(

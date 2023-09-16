@@ -1,4 +1,5 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
+import 'package:anime_app/app/core/common/extensions/color_extension.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/modules/home/presentation/cubit/home_cubit.dart';
@@ -39,7 +40,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
             bloc: _cubit,
             builder: (context, state) {
               return SeparatedColumn(
-                separatorBuilder: () => const Gap(20),
+                separatorBuilder: () => const Gap(10),
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +78,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       ),
                     ],
                   ),
-                  const Gap(60),
+                  const Gap(80),
                   HomeDrawerItem(
                     selected: _cubit.controller.index == 0,
                     ontap: () {
@@ -140,10 +141,47 @@ class HomeDrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      color: Colors.red,
-      child: Text(name),
-    ).expandedH();
+    return Material(
+      color: selected ? AppColors.pink_400.withOpacity(0.1) : Colors.transparent,
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: ontap,
+        splashColor: AppColors.pink_400.withOpacity(0.2),
+        overlayColor: AppColors.pink_400.withOpacity(0.1).toMaterialStateProperty(),
+        child: Container(
+          height: 45,
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    color: selected ? AppColors.pink_400 : AppColors.grey_200,
+                  ),
+                  const Gap(10),
+                  Text(name),
+                ],
+              ),
+              if (selected)
+                Container(
+                  width: 5,
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: AppColors.pink_400,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      bottomLeft: Radius.circular(5),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ).expandedH(),
+      ),
+    );
   }
 }
