@@ -14,6 +14,7 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  bool isLoading = true;
   List<AnimeEntity> animes = [];
 
   @override
@@ -26,11 +27,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   void loadAnimes() {
     animes = AnimeLogic.getAllFavoriteAnime();
+    isLoading = false;
     if (mounted) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const SizedBox();
+    }
     if (animes.isEmpty) {
       return const Center(
         child: Text(

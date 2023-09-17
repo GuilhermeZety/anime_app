@@ -11,6 +11,8 @@ class Anitube implements Integration {
   @override
   String episodeData(String uuid) => '${baseUrl}video/$uuid';
   @override
+  String animeData(String uuid, bool dublado, int page) => '$baseUrl${dublado ? 'animes-dublado' : 'anime'}/$uuid/page/$page';
+  @override
   String watch(String uuid, VideoQualityEnum quality, bool contains2) =>
       '${baseUrl}playerricas.php?name=apphd/.mp4&img=https://www.anitube.vip/media/videos/tmb/$uuid/default.jpg&url=https://ikaros.anicdn.net/${getResolution(quality, contains2)}/$uuid.mp4';
 

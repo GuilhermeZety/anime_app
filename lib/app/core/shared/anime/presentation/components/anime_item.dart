@@ -49,7 +49,10 @@ class _AnimeItemState extends State<AnimeItem> {
                   Positioned.fill(
                     child: Padding(
                       padding: const EdgeInsets.all(2),
-                      child: ImageCached(url: widget.anime.image ?? ''),
+                      child: ImageCached(
+                        url: widget.anime.image ?? '',
+                        radius: 20,
+                      ).hero(widget.anime.uuid),
                     ),
                   ),
                   Positioned.fill(

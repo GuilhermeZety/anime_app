@@ -4,9 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ImageCached extends StatefulWidget {
-  const ImageCached({super.key, required this.url});
+  const ImageCached({super.key, required this.url, this.fit, this.radius});
 
   final String url;
+  final BoxFit? fit;
+  final double? radius;
 
   @override
   State<ImageCached> createState() => _ImageCachedState();
@@ -46,9 +48,12 @@ class _ImageCachedState extends State<ImageCached> {
         ),
       );
     }
-    return Image.memory(
-      bytes!,
-      fit: BoxFit.cover,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(widget.radius ?? 0),
+      child: Image.memory(
+        bytes!,
+        fit: widget.fit ?? BoxFit.cover,
+      ),
     );
   }
 }

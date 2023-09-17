@@ -6,6 +6,7 @@ import 'package:anime_app/app/core/shared/anime/data/repositories/anime_reposito
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
+import 'package:anime_app/app/core/shared/anime/domain/usecases/get_anime_data.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_calendar.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_episode_data.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
@@ -40,6 +41,11 @@ class AnimeLogic {
     );
     i.addLazySingleton<GetEpisodeData>(
       () => GetEpisodeData(
+        repository: i.get<AnimeRepository>(),
+      ),
+    );
+    i.addLazySingleton<GetAnimeData>(
+      () => GetAnimeData(
         repository: i.get<AnimeRepository>(),
       ),
     );

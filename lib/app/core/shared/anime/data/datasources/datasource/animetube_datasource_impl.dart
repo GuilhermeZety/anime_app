@@ -1,12 +1,15 @@
+import 'package:anime_app/app/core/common/enums/anime_status_enum.dart';
 import 'package:anime_app/app/core/common/enums/video_quality_enum.dart';
 import 'package:anime_app/app/core/common/integrations/integration.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/common/utils/utils.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/anime_datasource.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_data_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/calendar_item_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_data_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_model.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -69,6 +72,87 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
       return EpisodeDataModel(
         quality: quality,
         containsTwo: identifier.contains('2'),
+      );
+    }
+
+    throw Exception('Erro ao buscar o calendario');
+  }
+
+  @override
+  Future<AnimeDataModel> getAnimeData(AnimeEntity anime, int page) async {
+    bool dublado = anime.name?.toLowerCase().contains('dublado') == true;
+    final response = await requestService.get(
+      integration.animeData(anime.uuid, dublado, page),
+    );
+    if (response.data != null && response.data is String) {
+      var document = parse(response.data);
+
+      var infos = document.querySelectorAll('.anime_info');
+
+      var gender = infos
+              .where((e) => e.querySelector('b')?.text.contains('Gêneros') == true)
+              .firstOrNull
+              ?.querySelectorAll('a')
+              .map(
+                (e) => e.text,
+              )
+              .toList()
+              .join(', ') ??
+          '';
+
+      var stats = (infos.where((e) => e.querySelector('b')?.text.contains('Status') == true).firstOrNull?.text.contains('Em Progresso') ?? false) ? AnimeStatus.inProgress : AnimeStatus.completed;
+
+      var season = infos.where((e) => e.querySelector('b')?.text.contains('Temporada') == true).firstOrNull?.querySelector('a')?.text ?? '';
+
+      List<EpisodeModel> episodes = [];
+
+      var list = document.querySelectorAll('.animepag_episodios_item');
+
+      for (var ep in list) {
+        var image = ep.querySelector('img');
+        var imageURL = image?.attributes['src']?.split('/') ?? [];
+        var uuid = imageURL[imageURL.length - 2];
+
+        var date = ep.querySelector('.animepag_episodios_item_date')?.text;
+        var duration = ep.querySelector('.animepag_episodios_item_time')?.text;
+
+        var episode = ep.querySelector('.animepag_episodios_item_views')?.text;
+
+        episodes.add(
+          EpisodeModel(
+            uuid: uuid,
+            episode: episode != null ? Utils.extractInt(episode) ?? 0 : 0,
+            duration: duration,
+            uploadDate: date,
+            name: image?.attributes['title'],
+            image: image?.attributes['src'],
+          ),
+        );
+      }
+
+      List<int> pages = [];
+
+      var pagination = document.querySelector('.pagination');
+
+      if (pagination != null) {
+        var items = pagination.querySelectorAll('a');
+
+        for (var item in items) {
+          var page = Utils.extractInt(item.text);
+          if (page != null) {
+            pages.add(page);
+          }
+        }
+      }
+
+      return AnimeDataModel(
+        dublado: dublado,
+        genders: gender,
+        status: stats,
+        season: season,
+        sinopsis: document.querySelector('.sinopse_container_content')?.text ?? '',
+        episodes: episodes,
+        pages: pages,
       );
     }
 
