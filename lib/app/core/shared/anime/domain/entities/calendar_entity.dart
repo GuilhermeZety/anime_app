@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class CalendarEntity extends Equatable {
@@ -67,5 +68,15 @@ abstract class CalendarAnimeEntity extends Equatable {
       type,
       date,
     ];
+  }
+}
+
+extension ToAnime on CalendarAnimeEntity {
+  AnimeModel toAnime() {
+    return AnimeModel(
+      uuid: uuid,
+      name: name,
+      image: image,
+    );
   }
 }

@@ -1,12 +1,13 @@
 import 'package:anime_app/app/core/common/extensions/entities_extension.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/animetube_datasource_impl.dart';
-import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
-import 'package:anime_app/app/core/shared/anime/data/models/episode_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/repositories/anime_repository_impl.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_calendar.dart';
+import 'package:anime_app/app/core/shared/anime/domain/usecases/get_episode_data.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/search_anime.dart';
 import 'package:anime_app/main.dart';
@@ -34,6 +35,11 @@ class AnimeLogic {
     );
     i.addLazySingleton<GetCalendar>(
       () => GetCalendar(
+        repository: i.get<AnimeRepository>(),
+      ),
+    );
+    i.addLazySingleton<GetEpisodeData>(
+      () => GetEpisodeData(
         repository: i.get<AnimeRepository>(),
       ),
     );

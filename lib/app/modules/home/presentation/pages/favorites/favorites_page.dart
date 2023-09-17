@@ -1,7 +1,7 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/components/anime_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

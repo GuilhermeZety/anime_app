@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:anime_app/app/core/common/features/usecases/usecase.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_releases.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';

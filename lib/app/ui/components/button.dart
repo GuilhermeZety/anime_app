@@ -77,7 +77,7 @@ class Button extends StatefulWidget {
             ),
           ),
           elevation: MaterialStateProperty.all<double>(5),
-          backgroundColor: (disabled ? AppColors.pink_400.withOpacity(0.6) : color ?? AppColors.pink_400).toMaterialStateProperty(),
+          backgroundColor: (disabled ? AppColors.grey_400.withOpacity(0.6) : color ?? AppColors.grey_400).toMaterialStateProperty(),
           foregroundColor: (disabled ? AppColors.grey_200 : AppColors.white).toMaterialStateProperty(),
           textStyle: MaterialStateProperty.all<TextStyle?>(
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

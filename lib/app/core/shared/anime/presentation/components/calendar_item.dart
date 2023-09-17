@@ -1,4 +1,5 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
+import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
@@ -8,6 +9,7 @@ import 'package:anime_app/app/ui/components/tag.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:gap/gap.dart';
 
 class CalendarItem extends StatefulWidget {
@@ -37,7 +39,7 @@ class _CalendarItemState extends State<CalendarItem> {
       },
       child: GestureDetector(
         onTap: () {
-          //TODO: logic to access Calendar
+          Modular.to.pushNamed(AppRoutes.anime, arguments: widget.anime.toAnime());
         },
         child: Center(
           child: AnimatedContainer(
@@ -166,7 +168,7 @@ class _CalendarItemState extends State<CalendarItem> {
                       ),
                     ).expanded(),
                   ],
-                ),
+                ).tooltip(widget.anime.name),
               ],
             ),
           ),

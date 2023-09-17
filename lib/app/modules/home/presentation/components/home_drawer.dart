@@ -67,7 +67,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           onTap: _openNotifications,
                           child: const Badge(
                             smallSize: 12,
-                            backgroundColor: AppColors.red_400,
+                            backgroundColor: AppColors.pink_400,
                             textColor: AppColors.white,
                             child: Icon(
                               Icons.notifications_rounded,

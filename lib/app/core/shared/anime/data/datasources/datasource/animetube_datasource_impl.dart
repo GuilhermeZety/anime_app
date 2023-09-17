@@ -1,10 +1,13 @@
+import 'package:anime_app/app/core/common/enums/video_quality_enum.dart';
 import 'package:anime_app/app/core/common/integrations/integration.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/common/utils/utils.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/anime_datasource.dart';
-import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/calendar_item_model.dart';
-import 'package:anime_app/app/core/shared/anime/data/models/episode_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_data_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_model.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
@@ -42,6 +45,37 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
   }
 
   @override
+  Future<EpisodeDataModel> getEpisodeData(EpisodeEntity episode) async {
+    final response = await requestService.get(
+      integration.episodeData(episode.uuid),
+    );
+    if (response.data != null && response.data is String) {
+      var document = parse(response.data);
+      VideoQualityEnum quality;
+
+      var list = document.querySelectorAll('.abaItem');
+      var urlSplitted = (document.querySelectorAll('[itemprop="contentURL"]').first.attributes['content'] ?? '').split('/');
+
+      var identifier = urlSplitted[urlSplitted.length - 2];
+
+      if (list.length == 1 || list.isEmpty) {
+        quality = VideoQualityEnum.sd;
+      } else if (list.length == 2) {
+        quality = VideoQualityEnum.hd;
+      } else {
+        quality = VideoQualityEnum.fullhd;
+      }
+
+      return EpisodeDataModel(
+        quality: quality,
+        containsTwo: identifier.contains('2'),
+      );
+    }
+
+    throw Exception('Erro ao buscar o calendario');
+  }
+
+  @override
   Future<CalendarModel> getCalendar() async {
     final response = await requestService.get(
       integration.calendar,
@@ -73,9 +107,9 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
       var date = anime.querySelector('.epi_loop_img_time');
       var uuid = '';
 
-      var imageURL = image?.attributes['src']?.split('/') ?? [];
-      if (imageURL.length > 3) {
-        uuid = imageURL[imageURL.length - 2];
+      var a = anime.querySelector('a');
+      if (a != null) {
+        uuid = a.attributes['href']?.split('/').last ?? '';
       }
 
       items.add(

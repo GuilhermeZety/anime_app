@@ -1,10 +1,13 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
+import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
+import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class AnimeItem extends StatefulWidget {
   const AnimeItem({super.key, required this.anime});
@@ -33,7 +36,7 @@ class _AnimeItemState extends State<AnimeItem> {
       },
       child: GestureDetector(
         onTap: () {
-          //TODO: logic to access Anime
+          Modular.to.pushNamed(AppRoutes.anime, arguments: widget.anime);
         },
         child: Center(
           child: AnimatedContainer(
@@ -89,7 +92,7 @@ class _AnimeItemState extends State<AnimeItem> {
                             fontSize: context.isLandscape ? 14 : 12,
                           ),
                         ),
-                      ),
+                      ).tooltip(widget.anime.name ?? ''),
                     ),
                   ),
                   Positioned(

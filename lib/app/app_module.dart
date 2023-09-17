@@ -6,6 +6,8 @@ import 'package:anime_app/app/core/common/services/requests/dio_request_service.
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/common/utils/toasting.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
+import 'package:anime_app/app/modules/anime/presentation/anime_page.dart';
 import 'package:anime_app/app/modules/home/home_module.dart';
 import 'package:anime_app/app/modules/not_connection/presenter/not_connection_page.dart';
 import 'package:anime_app/app/modules/not_found/presentation/pages/not_found_page.dart';
@@ -40,6 +42,19 @@ class AppModule extends Module {
         }
         return SearchPage(
           controller: r.args.data as TextEditingController,
+        );
+      },
+      transition: TransitionType.fadeIn,
+    );
+    r.child(
+      '/anime/',
+      child: (args) {
+        if (r.args.data == null || r.args.data is! AnimeEntity) {
+          Toasting.warning(args, message: 'Erro ao obter dados do anime');
+          return const SizedBox();
+        }
+        return AnimePage(
+          anime: r.args.data as AnimeEntity,
         );
       },
       transition: TransitionType.fadeIn,

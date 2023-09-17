@@ -1,7 +1,8 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/episode_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
+import 'package:anime_app/app/core/shared/anime/presentation/dialogs/watch_modal/watch_anime_modal.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
 import 'package:anime_app/app/ui/components/tag.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -48,8 +49,8 @@ class _EpisodeItemState extends State<EpisodeItem> {
           hooved = false;
           if (mounted) setState(() {});
         },
-        onTap: () {
-          //TODO: logic to access Episode
+        onTap: () async {
+          await WatchAnimeModal(episode: widget.episode).show(context);
         },
         child: Center(
           child: AnimatedContainer(
@@ -111,6 +112,7 @@ class _EpisodeItemState extends State<EpisodeItem> {
                 ).expanded(),
                 SizedBox(
                   height: 50,
+                  width: context.width,
                   child: Padding(
                     padding: const EdgeInsets.all(
                       10,
@@ -126,7 +128,7 @@ class _EpisodeItemState extends State<EpisodeItem> {
                       ),
                     ),
                   ),
-                ),
+                ).tooltip(widget.episode.name ?? ''),
               ],
             ),
           ),

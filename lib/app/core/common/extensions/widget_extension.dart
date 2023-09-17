@@ -25,3 +25,18 @@ extension Shimmer on Widget {
         color: AppColors.grey_300.withOpacity(0.4),
       );
 }
+
+extension Tooltiped on Widget {
+  Widget tooltip(String message) => Tooltip(
+        message: message,
+        verticalOffset: -60,
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.grey_600,
+          border: Border.all(color: AppColors.grey_200),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        textStyle: const TextStyle(fontSize: 12),
+        child: this,
+      );
+}

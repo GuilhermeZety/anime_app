@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/shared/anime/domain/entities/anime_entity.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/search_anime.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/components/anime_item.dart';
 import 'package:anime_app/app/ui/components/input_search.dart';

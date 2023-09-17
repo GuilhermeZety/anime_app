@@ -2,9 +2,11 @@ import 'package:anime_app/app/core/common/errors/failures.dart';
 import 'package:anime_app/app/core/common/services/treater/treater_service.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/anime_datasource.dart';
-import 'package:anime_app/app/core/shared/anime/data/models/anime_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_model.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/calendar_item_model.dart';
-import 'package:anime_app/app/core/shared/anime/data/models/episode_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_data_model.dart';
+import 'package:anime_app/app/core/shared/anime/data/models/episode/episode_model.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/repositories/anime_repository.dart';
 import 'package:dartz/dartz.dart';
 
@@ -22,6 +24,16 @@ class AnimeRepositoryImpl extends AnimeRepository {
         return await datasource.search(value);
       },
       errorIdentification: 'Erro ao buscar o anime',
+    );
+  }
+
+  @override
+  Future<Either<Failure, EpisodeDataModel>> getEpisodeData(EpisodeEntity episode) {
+    return TreaterService()<EpisodeDataModel>(
+      () async {
+        return await datasource.getEpisodeData(episode);
+      },
+      errorIdentification: 'Erro ao buscar os dados do episodio',
     );
   }
 
