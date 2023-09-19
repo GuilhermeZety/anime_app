@@ -6,7 +6,6 @@ import 'dart:typed_data';
 
 import 'package:anime_app/main.dart';
 import 'package:dio/dio.dart';
-import 'package:queue/queue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageCacheService {
@@ -21,8 +20,6 @@ class ImageCacheService {
   //   await queue.onComplete;
   //   log('verified queue');
   // });
-
-  static final Queue queue = Queue();
 
   Future<Uint8List?> getImage(String url) async {
     try {
