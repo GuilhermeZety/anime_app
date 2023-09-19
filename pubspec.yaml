@@ -1,7 +1,7 @@
 name: anime_app
 description: A new Flutter project.
 publish_to: 'none'
-version: 0.0.1+1
+version: 0.1.0+2
 
 environment:
   sdk: '>=3.1.1 <4.0.0'
@@ -35,6 +35,9 @@ dependencies:
   html: ^0.15.4
   url_launcher: ^6.1.14
   queue: ^3.1.0+2
+  media_kit: ^1.1.7                              # Primary package.
+  media_kit_video: ^1.1.8                        # For video rendering.
+  media_kit_libs_video: ^1.0.1         
 
 dev_dependencies:
   flutter_test:
@@ -59,14 +62,14 @@ flutter_native_splash:
   web: false
 
   image: assets/native_splash.png
-  icon_background_color: "#212332"
+  icon_background_color: "#232323"
   branding: assets/native_splash.png
   branding_mode: bottom
 
   android_12:
     image: assets/native_splash.png
-    color: "#212332"
-    icon_background_color: "#212332"
+    color: "#232323"
+    icon_background_color: "#232323"
     branding: assets/native_splash.png
 
 

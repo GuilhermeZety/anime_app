@@ -1,20 +1,24 @@
 import 'dart:developer';
 
+import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/enums/video_quality_enum.dart';
 import 'package:anime_app/app/core/common/integrations/animetube.dart';
+import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_data_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_episode_data.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'watch_anime_state.dart';
 
 class WatchAnimeCubit extends Cubit<WatchAnimeState> {
   WatchAnimeCubit() : super(WatchAnimeLoading());
 
+  AnimeEntity? anime;
+  int? page;
   late EpisodeEntity episode;
   EpisodeDataEntity? episodeData;
 
@@ -22,8 +26,10 @@ class WatchAnimeCubit extends Cubit<WatchAnimeState> {
 
   VideoQualityEnum quality = VideoQualityEnum.sd;
 
-  Future init(EpisodeEntity ep) async {
+  Future init(EpisodeEntity ep, AnimeEntity? anim, int? pg) async {
     episode = ep;
+    anime = anim;
+    page = pg;
 
     episodeData = await Modular.get<GetEpisodeData>()(GetEpisodeDataParams(episode: episode)).then((value) => value.fold((l) => null, (r) => r));
     if (episodeData != null) {
@@ -49,6 +55,18 @@ class WatchAnimeCubit extends Cubit<WatchAnimeState> {
   }
 
   Future watch() async {
-    launchUrl(Uri.parse(Anitube().watch(episode.uuid, quality, episodeData?.containsTwo ?? false)));
+    Modular.to.pushNamed(
+      AppRoutes.watch,
+      arguments: 'https://ikaros.anicdn.net/${Anitube().getResolution(quality, episodeData?.containsTwo ?? false)}/${episode.uuid}.mp4',
+    );
+
+    if (anime != null && page != null) {
+      await AnimeLogic.setWatchEps(
+        episode: episode,
+        anime: anime!,
+        page: page!,
+      );
+    }
+    // launchUrl(Uri.parse(Anitube().watch(episode.uuid, quality, episodeData?.containsTwo ?? false)));
   }
 }

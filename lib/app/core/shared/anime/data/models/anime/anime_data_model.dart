@@ -5,6 +5,7 @@ class AnimeDataModel extends AnimeDataEntity {
   const AnimeDataModel({
     required super.genders,
     required super.status,
+    required super.page,
     required super.season,
     required super.sinopsis,
     required super.episodes,

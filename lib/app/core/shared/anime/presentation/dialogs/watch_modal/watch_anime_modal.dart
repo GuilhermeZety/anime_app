@@ -2,6 +2,7 @@ import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/enums/video_quality_enum.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/common/utils/custom_dialog_utils.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/dialogs/watch_modal/cubit/watch_anime_cubit.dart';
 import 'package:anime_app/app/ui/components/button.dart';
@@ -17,8 +18,12 @@ class WatchAnimeModal extends StatefulWidget {
   const WatchAnimeModal({
     super.key,
     required this.episode,
+    this.anime,
+    this.page,
   });
 
+  final AnimeEntity? anime;
+  final int? page;
   final EpisodeEntity episode;
 
   Future show(
@@ -39,7 +44,7 @@ class _WatchAnimeModalState extends State<WatchAnimeModal> {
 
   @override
   void initState() {
-    cubit.init(widget.episode);
+    cubit.init(widget.episode, widget.anime, widget.page);
     super.initState();
   }
 

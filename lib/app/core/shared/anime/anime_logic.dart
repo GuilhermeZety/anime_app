@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:anime_app/app/core/common/extensions/entities_extension.dart';
 import 'package:anime_app/app/core/shared/anime/data/datasources/datasource/animetube_datasource_impl.dart';
 import 'package:anime_app/app/core/shared/anime/data/models/anime/anime_model.dart';
@@ -53,6 +55,7 @@ class AnimeLogic {
 
   static const String key = 'favorite_anime';
   static const String releasesKey = 'releases';
+  static const String watchedAnime = 'watchedAnime';
 
   static List<AnimeEntity> getAllFavoriteAnime() {
     var response = session.prefs.getStringList(key);
@@ -113,5 +116,28 @@ class AnimeLogic {
     var map = response.map((e) => EpisodeModel.fromJson(e)).toList();
 
     return map;
+  }
+
+  static Future<void> setWatchEps({required EpisodeEntity episode, required AnimeEntity anime, required int page}) async {
+    var eps = getAnimeWatchEps(anime.uuid);
+    eps.removeWhere((element) => element['anime'] == anime.uuid);
+    eps.add({
+      'anime': anime.uuid,
+      'ep': episode.uuid,
+      'page': page,
+    });
+
+    await session.prefs.setStringList(
+      anime.uuid,
+      eps.map((e) => jsonEncode(e)).toList(),
+    );
+  }
+
+  static List<Map<String, dynamic>> getAnimeWatchEps(String uuidAnime) {
+    var response = session.prefs.getStringList(uuidAnime);
+
+    if (response == null) return [];
+
+    return response.map<Map<String, dynamic>>((e) => jsonDecode(e)).toList();
   }
 }

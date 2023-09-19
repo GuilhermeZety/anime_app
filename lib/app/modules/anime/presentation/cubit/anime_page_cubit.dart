@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_data_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/usecases/get_anime_data.dart';
@@ -16,8 +17,9 @@ class AnimePageCubit extends Cubit<AnimePageState> {
   AnimeDataEntity? animeData;
 
   Future init(AnimeEntity anim) async {
+    var list = AnimeLogic.getAnimeWatchEps(anim.uuid);
     anime = anim;
-    await getData(1);
+    await getData(list.isNotEmpty == true ? list.last['page'] ?? 1 : 1);
     log(animeData?.genders ?? '');
   }
 

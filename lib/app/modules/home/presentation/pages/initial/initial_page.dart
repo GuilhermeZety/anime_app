@@ -7,6 +7,7 @@ import 'package:anime_app/app/modules/home/presentation/pages/initial/cubit/init
 import 'package:anime_app/app/ui/components/input.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -118,7 +119,7 @@ class _InitialPageState extends State<InitialPage> {
             else
               ..._cubit.releases
                   .map(
-                    (e) => EpisodeItem(episode: e),
+                    (e) => EpisodeItem(episode: e).animate().fade(),
                   )
                   .toList(),
           ],

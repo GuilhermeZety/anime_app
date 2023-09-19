@@ -13,6 +13,7 @@ import 'package:anime_app/app/modules/not_connection/presenter/not_connection_pa
 import 'package:anime_app/app/modules/not_found/presentation/pages/not_found_page.dart';
 import 'package:anime_app/app/modules/search/presentation/pages/search_page.dart';
 import 'package:anime_app/app/modules/splash/presentation/pages/splash_page.dart';
+import 'package:anime_app/app/modules/watch/presentation/watch_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -55,6 +56,19 @@ class AppModule extends Module {
         }
         return AnimePage(
           anime: r.args.data as AnimeEntity,
+        );
+      },
+      transition: TransitionType.fadeIn,
+    );
+    r.child(
+      '/watch/',
+      child: (args) {
+        if (r.args.data == null || r.args.data is! String) {
+          Toasting.warning(args, message: 'Erro ao assistir anime');
+          return const SizedBox();
+        }
+        return WatchPage(
+          link: r.args.data as String,
         );
       },
       transition: TransitionType.fadeIn,

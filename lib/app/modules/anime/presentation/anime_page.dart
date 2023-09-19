@@ -252,7 +252,7 @@ class _AnimePageState extends State<AnimePage> {
                     width: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColors.grey_700,
+                      color: cubit.animeData!.page == e ? AppColors.pink_400 : AppColors.grey_700,
                     ),
                     child: Text(
                       '$e',
@@ -272,7 +272,7 @@ class _AnimePageState extends State<AnimePage> {
   }
 
   Widget _buildGridAnimes(bool loading) {
-    var qtd = ((context.width - 40) / 210).floor().abs();
+    var qtd = ((context.width - 40) / 150).floor().abs();
     if (qtd > 6) {
       qtd = 6;
     }
@@ -289,7 +289,13 @@ class _AnimePageState extends State<AnimePage> {
         childAspectRatio: 0.9,
       ),
       itemCount: cubit.animeData?.episodes.length ?? qtd * 3,
-      itemBuilder: (_, index) => loading ? const ShimmedBox() : EpisodeItem(episode: cubit.animeData!.episodes[index]),
+      itemBuilder: (_, index) => loading
+          ? const ShimmedBox()
+          : EpisodeItem(
+              episode: cubit.animeData!.episodes[index],
+              anime: widget.anime,
+              page: cubit.animeData!.page,
+            ),
     );
   }
 }

@@ -148,6 +148,7 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
       return AnimeDataModel(
         dublado: dublado,
         genders: gender,
+        page: page,
         status: stats,
         season: season,
         sinopsis: document.querySelector('.sinopse_container_content')?.text ?? '',

@@ -1,6 +1,8 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
+import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
+import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_entity.dart';
 import 'package:anime_app/app/core/shared/anime/presentation/dialogs/watch_modal/watch_anime_modal.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
@@ -9,8 +11,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class EpisodeItem extends StatefulWidget {
-  const EpisodeItem({super.key, required this.episode});
+  const EpisodeItem({super.key, required this.episode, this.anime, this.page});
 
+  final AnimeEntity? anime;
+  final int? page;
   final EpisodeEntity episode;
 
   @override
@@ -20,12 +24,11 @@ class EpisodeItem extends StatefulWidget {
 class _EpisodeItemState extends State<EpisodeItem> {
   bool hooved = false;
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    bool watched = false;
+    if (widget.anime != null) {
+      watched = AnimeLogic.getAnimeWatchEps(widget.anime!.uuid).where((element) => element['ep'] == widget.episode.uuid).isNotEmpty;
+    }
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) {
@@ -50,11 +53,20 @@ class _EpisodeItemState extends State<EpisodeItem> {
           if (mounted) setState(() {});
         },
         onTap: () async {
-          await WatchAnimeModal(episode: widget.episode).show(context);
+          await WatchAnimeModal(
+            episode: widget.episode,
+            anime: widget.anime,
+            page: widget.page,
+          ).show(context);
+          if (mounted) setState(() {});
         },
         child: Center(
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: watched ? AppColors.grey_400 : null,
+            ),
             transform: hooved ? (Matrix4.identity()..scale(0.98)) : Matrix4.identity(),
             child: Column(
               children: [

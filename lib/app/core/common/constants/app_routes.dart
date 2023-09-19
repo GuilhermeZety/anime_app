@@ -4,4 +4,5 @@ class AppRoutes {
   static String get search => '/search/';
   static String get notConnection => '/not_connection/';
   static String get anime => '/anime/';
+  static String get watch => '/watch/';
 }

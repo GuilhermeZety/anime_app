@@ -9,7 +9,7 @@ abstract class AnimeDataEntity extends Equatable {
   final String season;
   final String sinopsis;
   final bool dublado;
-
+  final int page;
   final List<EpisodeEntity> episodes;
   final List<int> pages;
 
@@ -17,6 +17,7 @@ abstract class AnimeDataEntity extends Equatable {
     required this.genders,
     required this.status,
     required this.season,
+    required this.page,
     required this.sinopsis,
     required this.episodes,
     required this.pages,
