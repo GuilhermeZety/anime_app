@@ -1,5 +1,6 @@
 import 'package:anime_app/app/core/common/integrations/animetube.dart';
 import 'package:anime_app/app/core/common/integrations/integration.dart';
+import 'package:anime_app/app/core/common/services/connection/connection_checker_plus_service_impl.dart';
 import 'package:anime_app/app/core/common/services/connection/connection_service.dart';
 import 'package:anime_app/app/core/common/services/connection/ping_connection_service_impl.dart';
 import 'package:anime_app/app/core/common/services/requests/dio_request_service.dart';
@@ -21,7 +22,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class AppModule extends Module {
   @override
   void binds(Injector i) {
-    i.addSingleton<ConnectionService>(() => PingConnectionServiceImpl());
+    i.addSingleton<ConnectionService>(() => ConnectionCheckerPlusServiceImpl());
     i.addSingleton<RequestService>(() => DioRequestService());
     i.addSingleton<Integration>(() => Anitube());
     AnimeLogic.binds(i);

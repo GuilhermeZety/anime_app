@@ -105,6 +105,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.2"
+  connectivity_plus:
+    dependency: transitive
+    description:
+      name: connectivity_plus
+      sha256: "77a180d6938f78ca7d2382d2240eb626c0f6a735d0bfdce227d8ffb80f95c48b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.2"
+  connectivity_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: connectivity_plus_platform_interface
+      sha256: cf1d1c28f4416f8c654d7dc3cd638ec586076255d407cef3ddbdaf178272a71a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.4"
   convert:
     dependency: transitive
     description:
@@ -129,22 +145,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  dart_ping:
-    dependency: "direct main"
-    description:
-      name: dart_ping
-      sha256: dd3a93d9b986565cb2fadd0c9277cf9880298634ccc9588e353e63c6f736a386
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.0"
-  dart_ping_ios:
-    dependency: "direct main"
-    description:
-      name: dart_ping_ios
-      sha256: "5d27e4d3e7fccbc123bbb5c2803f5cb5933aea2f91b80ee1151d852f51b20cf3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
   dartz:
     dependency: "direct main"
     description:
@@ -230,14 +230,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.1.3"
-  flutter_icmp_ping:
-    dependency: transitive
-    description:
-      name: flutter_icmp_ping
-      sha256: de9633cf65a8c733fae29d08a35d3d4b343620cd1d13e1bfa88eccf56696d896
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.3"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -341,6 +333,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.17"
+  internet_connection_checker_plus:
+    dependency: "direct main"
+    description:
+      name: internet_connection_checker_plus
+      sha256: dd98ac57e2d1cf283f16a5759f6d98905499449cafb47375bbf7001352a7feec
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   intl:
     dependency: transitive
     description:
@@ -493,6 +493,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  nm:
+    dependency: transitive
+    description:
+      name: nm
+      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   package_info_plus:
     dependency: transitive
     description:

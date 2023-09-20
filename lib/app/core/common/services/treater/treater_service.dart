@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:dartz/dartz.dart';
 import 'package:anime_app/app/core/common/errors/exceptions.dart';
 import 'package:anime_app/app/core/common/errors/failures.dart';
-import 'package:anime_app/app/core/common/services/connection/ping_connection_service_impl.dart';
+import 'package:anime_app/app/core/common/services/connection/connection_checker_plus_service_impl.dart';
+import 'package:dartz/dartz.dart';
 
 class TreaterService {
   Future<Either<Failure, T>> call<T>(
@@ -11,7 +11,7 @@ class TreaterService {
     String? errorIdentification,
     bool online = true,
   }) async {
-    if (await PingConnectionServiceImpl().isConnected || !online) {
+    if (await ConnectionCheckerPlusServiceImpl().isConnected || !online) {
       try {
         return Right(await code());
       } on ServerException catch (e) {
