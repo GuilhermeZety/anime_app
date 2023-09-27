@@ -6,6 +6,7 @@ import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_
 class EpisodeModel extends EpisodeEntity {
   const EpisodeModel({
     required super.uuid,
+    required super.videoUuid,
     required super.episode,
     super.image,
     super.duration,
@@ -15,6 +16,7 @@ class EpisodeModel extends EpisodeEntity {
 
   EpisodeModel copyWith({
     String? uuid,
+    String? videoUuid,
     String? image,
     String? name,
     String? duration,
@@ -24,6 +26,7 @@ class EpisodeModel extends EpisodeEntity {
   }) {
     return EpisodeModel(
       uuid: uuid ?? this.uuid,
+      videoUuid: videoUuid ?? this.videoUuid,
       image: image ?? this.image,
       name: name ?? this.name,
       episode: episode ?? this.episode,
@@ -35,6 +38,7 @@ class EpisodeModel extends EpisodeEntity {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'uuid': uuid,
+      'videoUuid': videoUuid,
       'image': image,
       'name': name,
       'episode': episode,
@@ -46,6 +50,7 @@ class EpisodeModel extends EpisodeEntity {
   factory EpisodeModel.fromMap(Map<String, dynamic> map) {
     return EpisodeModel(
       uuid: map['uuid'] as String,
+      videoUuid: map['videoUuid'] as String?,
       image: map['image'] != null ? map['image'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
       duration: map['duration'] != null ? map['duration'] as String : null,

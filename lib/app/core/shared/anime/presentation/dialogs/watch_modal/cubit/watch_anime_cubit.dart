@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/enums/video_quality_enum.dart';
-import 'package:anime_app/app/core/common/integrations/animetube.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_data_entity.dart';
@@ -33,7 +30,6 @@ class WatchAnimeCubit extends Cubit<WatchAnimeState> {
 
     episodeData = await Modular.get<GetEpisodeData>()(GetEpisodeDataParams(episode: episode)).then((value) => value.fold((l) => null, (r) => r));
     if (episodeData != null) {
-      quality = episodeData!.quality;
       switch (episodeData!.quality) {
         case VideoQualityEnum.fullhd:
           qualityLimit = 3;
@@ -43,8 +39,6 @@ class WatchAnimeCubit extends Cubit<WatchAnimeState> {
           qualityLimit = 1;
       }
     }
-    log('contains 2 ${episodeData!.containsTwo.toString()}');
-
     emit(WatchAnimeSelectQuality());
   }
 
@@ -57,7 +51,7 @@ class WatchAnimeCubit extends Cubit<WatchAnimeState> {
   Future watch() async {
     Modular.to.pushNamed(
       AppRoutes.watch,
-      arguments: 'https://ikaros.anicdn.net/${Anitube().getResolution(quality, episodeData?.containsTwo ?? false)}/${episode.uuid}.mp4',
+      arguments: [episodeData, quality, anime],
     );
 
     if (anime != null && page != null) {

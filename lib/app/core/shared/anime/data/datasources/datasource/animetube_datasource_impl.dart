@@ -52,6 +52,7 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
     final response = await requestService.get(
       integration.episodeData(episode.uuid),
     );
+
     if (response.data != null && response.data is String) {
       var document = parse(response.data);
       VideoQualityEnum quality;
@@ -69,9 +70,23 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
         quality = VideoQualityEnum.fullhd;
       }
 
+      var controllers = document.querySelector('.controles_ep');
+
+      // if (controllers != null) {
+      var next = controllers?.children.where((element) => element.text.contains('Próximo')).firstOrNull;
+      var previous = controllers?.children.where((element) => element.text.contains('Anterior')).firstOrNull;
+
+      var nextUUID = next?.attributes['href']?.split('/').last;
+      var previousUUID = previous?.attributes['href']?.split('/').last;
+      // }
       return EpisodeDataModel(
         quality: quality,
+        uuid: episode.uuid,
+        videoUuid: episode.videoUuid,
+        name: episode.name,
         containsTwo: identifier.contains('2'),
+        nextEpisodeUuid: nextUUID,
+        previousEpisodeUuid: previousUUID,
       );
     }
 
@@ -111,7 +126,8 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
       for (var ep in list) {
         var image = ep.querySelector('img');
         var imageURL = image?.attributes['src']?.split('/') ?? [];
-        var uuid = imageURL[imageURL.length - 2];
+        var videoUuid = imageURL[imageURL.length - 2];
+        var uuid = ep.querySelector('a')?.attributes['href']?.split('/').last ?? '';
 
         var date = ep.querySelector('.animepag_episodios_item_date')?.text;
         var duration = ep.querySelector('.animepag_episodios_item_time')?.text;
@@ -121,6 +137,7 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
         episodes.add(
           EpisodeModel(
             uuid: uuid,
+            videoUuid: videoUuid,
             episode: episode != null ? Utils.extractInt(episode) ?? 0 : 0,
             duration: duration,
             uploadDate: date,
@@ -247,6 +264,7 @@ class AnimetubeDatasourceImpl extends AnimeDatasource {
         episodes.add(
           EpisodeModel(
             uuid: uuid,
+            videoUuid: uuid,
             episode: episode != null ? Utils.extractInt(episode) ?? 0 : 0,
             duration: duration?.text,
             uploadDate: date?.text,

@@ -120,7 +120,7 @@ class AnimeLogic {
 
   static Future<void> setWatchEps({required EpisodeEntity episode, required AnimeEntity anime, required int page}) async {
     var eps = getAnimeWatchEps(anime.uuid);
-    eps.removeWhere((element) => element['anime'] == anime.uuid);
+    eps.removeWhere((element) => element['ep'] == episode.uuid);
     eps.add({
       'anime': anime.uuid,
       'ep': episode.uuid,

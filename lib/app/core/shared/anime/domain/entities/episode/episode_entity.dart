@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 abstract class EpisodeEntity extends Equatable {
   final String uuid;
+  final String? videoUuid;
   final String? image;
   final String? name;
   final int episode;
@@ -14,6 +15,7 @@ abstract class EpisodeEntity extends Equatable {
 
   const EpisodeEntity({
     required this.uuid,
+    required this.videoUuid,
     this.image,
     this.name,
     this.uploadDate,
