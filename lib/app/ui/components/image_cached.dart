@@ -78,10 +78,12 @@ class _ImageCachedState extends State<ImageCached> {
 
   @override
   void initState() {
-    ImageCacheService().getR(widget.url).then((value) {
-      resp = value;
-      if (mounted) setState(() {});
-    });
+    ImageCacheService().getR(widget.url).then(
+      (value) {
+        resp = value;
+        if (mounted) setState(() {});
+      },
+    );
     super.initState();
   }
 

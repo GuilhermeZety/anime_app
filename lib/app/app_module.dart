@@ -70,12 +70,15 @@ class AppModule extends Module {
     r.child(
       '/watch/',
       child: (args) {
-        if (r.args.data == null || r.args.data is! String) {
+        if (r.args.data == null || r.args.data is! List) {
           Toasting.warning(args, message: 'Erro ao assistir anime');
+          Modular.to.pop();
           return const SizedBox();
         }
         return WatchPage(
-          link: r.args.data as String,
+          episodeData: r.args.data[0],
+          quality: r.args.data[1],
+          anime: r.args.data[2],
         );
       },
       transition: TransitionType.fadeIn,

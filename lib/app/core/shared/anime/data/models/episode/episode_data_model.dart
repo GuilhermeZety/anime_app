@@ -4,6 +4,11 @@ import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_
 class EpisodeDataModel extends EpisodeDataEntity {
   const EpisodeDataModel({
     required super.quality,
+    required super.uuid,
+    super.videoUuid,
+    super.name,
     super.containsTwo,
+    super.nextEpisodeUuid,
+    super.previousEpisodeUuid,
   });
 }
