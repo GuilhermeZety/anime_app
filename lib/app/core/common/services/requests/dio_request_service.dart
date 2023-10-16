@@ -10,12 +10,12 @@ class DioRequestService extends RequestService {
   DioRequestService({Dio? dio}) : _dio = dio ?? Dio();
 
   @override
-  Future<RequestResult> get(String url, {Map<String, dynamic>? headers}) async {
+  Future<RequestResult> get(String url, {Map<String, dynamic>? body, Map<String, dynamic>? headers}) async {
     try {
       if (!(await _isConnected)) {
         throw NotInternetConnectionException();
       }
-      var response = await _dio.get(url, options: Options(headers: headers));
+      var response = await _dio.get(url, data: body, options: Options(headers: headers));
       if ((response.statusCode ?? 404) >= 200 && (response.statusCode ?? 404) < 300) {
         return RequestResult(
           statusCode: response.statusCode ?? 0,

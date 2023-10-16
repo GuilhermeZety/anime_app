@@ -2,14 +2,19 @@ import 'package:anime_app/app/core/common/integrations/animetube.dart';
 import 'package:anime_app/app/core/common/integrations/integration.dart';
 import 'package:anime_app/app/core/common/services/connection/connection_checker_plus_service_impl.dart';
 import 'package:anime_app/app/core/common/services/connection/connection_service.dart';
-import 'package:anime_app/app/core/common/services/connection/ping_connection_service_impl.dart';
 import 'package:anime_app/app/core/common/services/requests/dio_request_service.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/common/utils/toasting.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
+import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
+import 'package:anime_app/app/core/shared/manga/manga_logic.dart';
 import 'package:anime_app/app/modules/anime/presentation/anime_page.dart';
 import 'package:anime_app/app/modules/home/home_module.dart';
+import 'package:anime_app/app/modules/manga/home/presentation/manga_page.dart';
+import 'package:anime_app/app/modules/manga/manga_home_module.dart';
+import 'package:anime_app/app/modules/manga/read/presentation/read_page.dart';
+import 'package:anime_app/app/modules/manga/search/presentation/manga_search_page.dart';
 import 'package:anime_app/app/modules/not_connection/presenter/not_connection_page.dart';
 import 'package:anime_app/app/modules/not_found/presentation/pages/not_found_page.dart';
 import 'package:anime_app/app/modules/search/presentation/pages/search_page.dart';
@@ -26,6 +31,7 @@ class AppModule extends Module {
     i.addSingleton<RequestService>(() => DioRequestService());
     i.addSingleton<Integration>(() => Anitube());
     AnimeLogic.binds(i);
+    MangaLogic.binds(i);
   }
 
   @override
@@ -84,6 +90,51 @@ class AppModule extends Module {
       module: HomeModule(),
       transition: TransitionType.fadeIn,
       duration: 700.ms,
+    );
+    r.module(
+      '/manga_home/',
+      module: MangaHomeModule(),
+      transition: TransitionType.fadeIn,
+      duration: 700.ms,
+    );
+    r.child(
+      '/manga_search/',
+      child: (args) {
+        if (r.args.data == null || r.args.data is! TextEditingController) {
+          Toasting.warning(args, message: 'Erro ao pesquisar');
+          return const SizedBox();
+        }
+        return MangaSearchPage(
+          controller: r.args.data as TextEditingController,
+        );
+      },
+      transition: TransitionType.fadeIn,
+    );
+    r.child(
+      '/manga/',
+      child: (args) {
+        if (r.args.data == null || r.args.data is! MangaEntity) {
+          Toasting.warning(args, message: 'Erro ao obter dados do anime');
+          return const SizedBox();
+        }
+        return MangaPage(
+          manga: r.args.data as MangaEntity,
+        );
+      },
+      transition: TransitionType.fadeIn,
+    );
+    r.child(
+      '/read/',
+      child: (args) {
+        if (r.args.data == null || r.args.data is! int) {
+          Toasting.warning(args, message: 'Erro ao obter dados do anime');
+          return const SizedBox();
+        }
+        return ReadPage(
+          idRelease: r.args.data as int,
+        );
+      },
+      transition: TransitionType.fadeIn,
     );
     r.wildcard(child: (args) => const NotFoundPage());
   }

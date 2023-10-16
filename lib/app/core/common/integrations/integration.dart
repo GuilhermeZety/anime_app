@@ -9,3 +9,8 @@ abstract class Integration {
   String get calendar;
   String watch(String uuid, VideoQualityEnum quality, bool contains2);
 }
+
+abstract class IntegrationManga {
+  final String baseUrl = 'baseUrl';
+  String search(String value);
+}

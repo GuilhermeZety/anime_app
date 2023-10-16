@@ -19,6 +19,24 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      //Procurar mangás
+      // final resp = await Modular.get<SearchManga>()(SearchMangaParams(value: 'jujutsu kaisen'));
+
+      //Procurar capítulos por página
+      // final resp = await Modular.get<GetChapters>()(GetChaptersParams(page: 1, idSerie: 11491));
+
+      //Procurar imagens do capitulo com base na idRelease da scan
+      // final resp = await Modular.get<GetImages>()(GetImagesParams(idRelease: 95444));
+
+      // Procurar lançamentos
+      // final resp = await Modular.get<GetReleasesMangas>()(GetReleasesMangasParams(page: 1));
+
+      // Procurar descrição do manga
+      // final resp = await Modular.get<GetDescription>()(GetDescriptionParams(url: '/serie/1/naruto'));
+
+      // print(resp.fold((l) => null, (r) => r));
+    });
     service.navigate(context);
   }
 

@@ -16,6 +16,7 @@ class CurrentSession {
   String? userUuid;
 
   Future init() async {
+    
     prefs = await SharedPreferences.getInstance();
     // firebaseApp = await Firebase.initializeApp(
     //   options: DefaultFirebaseOptions.currentPlatform,
