@@ -16,10 +16,16 @@ class MangaBottomBar extends StatefulWidget {
   State<MangaBottomBar> createState() => _MangaBottomBarState();
 }
 
-class _MangaBottomBarState extends State<MangaBottomBar> {
+class _MangaBottomBarState extends State<MangaBottomBar> with SingleTickerProviderStateMixin {
   final MangaHomeCubit _cubit = Modular.get();
 
   final qtdItens = 3;
+
+  @override
+  void initState() {
+    _cubit.controller = TabController(length: qtdItens, vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

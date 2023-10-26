@@ -7,7 +7,6 @@ part 'manga_home_state.dart';
 class MangaHomeCubit extends Cubit<MangaHomeState> {
   MangaHomeCubit() : super(MangaHomeInitial());
 
-
   int lastIndex = 0;
   late TabController controller;
 

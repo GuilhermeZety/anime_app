@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:anime_app/app/core/shared/manga/domain/usecases/get_images.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -13,7 +15,7 @@ class ReadPageCubit extends Cubit<ReadPageState> {
   void init(String mangaId, String cap) async {
     emit(ReadPageLoading());
     listImages = await Modular.get<GetImages>()(GetImagesParams(mangaId: int.parse(mangaId), cap: cap)).then((value) => value.fold((l) => null, (r) => r));
-    print(listImages);
+    log(listImages.toString());
 
     emit(ReadPageInitial());
   }

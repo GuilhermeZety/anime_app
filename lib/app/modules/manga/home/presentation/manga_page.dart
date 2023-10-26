@@ -4,7 +4,6 @@ import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/modules/manga/manga/presentation/cubit/manga_page_cubit.dart';
-import 'package:anime_app/app/ui/components/button.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
 import 'package:anime_app/app/ui/components/input.dart';
 import 'package:anime_app/app/ui/components/panel.dart';
