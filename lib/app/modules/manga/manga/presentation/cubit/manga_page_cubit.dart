@@ -1,88 +1,70 @@
-import 'package:anime_app/app/core/shared/manga/domain/entities/chapter_entity.dart';
+import 'dart:developer';
+
+import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
+import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/core/shared/manga/domain/usecases/get_chapters.dart';
 import 'package:anime_app/app/core/shared/manga/domain/usecases/get_description.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:html/parser.dart';
 
 part 'manga_page_state.dart';
 
 class MangaPageCubit extends Cubit<MangaPageState> {
   MangaPageCubit() : super(MangaPageInitial());
 
-  final ScrollController scrollController = ScrollController();
+  final TextEditingController controller = TextEditingController();
 
   String? description;
-  List<ChapterEntity>? listChapters;
+  ChapterSlimeModel? chapter;
   MangaEntity? mangaEntity;
   int pagina = 1;
   bool reverse = false;
+  List<BookTempCapsEntity> caps = [];
+  // List<String> capsOriginal = [];
+  List<BookTempCapsEntity> capsOriginalObj = [];
 
-  Future init(MangaEntity manga) async {
+  Future init(MangaSlimeEntity manga) async {
     emit(MangaPageLoading());
-    if (manga.link != '') {
-      mangaEntity = manga;
-      await getDescription(manga.link!);
-      await getMangaChapters(manga, 1);
+    await getMangaChapters(manga, 1);
+    // if (manga.link != '') {
+    //   mangaEntity = manga;
+    //   await getDescription(manga.link!);
+    //   await getMangaChapters(manga, 1);
+    // }
+    emit(MangaPageInitial());
+  }
+
+  void search(String number) {
+    emit(MangaPageLoading());
+    if (number.isEmpty) {
+      caps = capsOriginalObj;
+      return;
     }
-    emit(MangaPageInitial());
-  }
-
-  Future getDescription(String link) async {
-    emit(MangaPageLoading());
-
-    description = await Modular.get<GetDescription>()(GetDescriptionParams(url: link)).then((value) => value.fold((l) => null, (r) => r));
-    emit(MangaPageInitial());
-  }
-
-  Future getMangaChapters(MangaEntity manga, int? page) async {
-    emit(MangaPageLoading());
-
-    if (manga.idSerie != null) {
-      listChapters = await Modular.get<GetChapters>()(GetChaptersParams(idSerie: manga.idSerie!, page: page)).then((value) => value.fold((l) => null, (r) => r));
-    }
-    emit(MangaPageInitial());
-  }
-
-  Future getMangaChaptersReverse(MangaEntity manga) async {
-    emit(MangaPageLoading());
-
-    if (manga.idSerie != null) {
-      List<ChapterEntity> list = [];
-      var index = int.parse(listChapters!.first.number!).ceil();
-      for (var i = 0; i < index; i++) {
-        listChapters = await Modular.get<GetChapters>()(GetChaptersParams(idSerie: manga.idSerie!, page: i)).then((value) => value.fold((l) => null, (r) => r));
-        if (listChapters != null) {
-          list = listChapters!;
-        } else {
-          listChapters = list;
-          reverse = true;
-          listChapters?.sort((a, b) => double.parse(a.number ?? '0').compareTo(double.parse(b.number ?? '0')));
-          emit(MangaPageInitial());
-          return;
-        }
+    List<BookTempCapsEntity> capsFiltered = [];
+    for (var cap in capsOriginalObj) {
+      if (cap.btcCap == double.parse(number)) {
+        capsFiltered.add(cap);
       }
     }
+    caps = capsFiltered;
     emit(MangaPageInitial());
   }
 
-  void onScroll() async {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
-      pagina = pagina + 1;
-      if (mangaEntity != null) {
-        var resp = await Modular.get<GetChapters>()(GetChaptersParams(idSerie: mangaEntity!.idSerie!, page: pagina)).then((value) => value.fold((l) => null, (r) => r));
-        if (resp != null) {
-          listChapters?.addAll(resp);
-          listChapters?.sort((a, b) => double.parse(b.number ?? '0').compareTo(double.parse(a.number ?? '0')));
-          emit(MangaPageLoading());
-          emit(MangaPageInitial());
-        }
-      }
-      // O usuário chegou ao fim da tela
-      // Faça a lógica desejada quando o usuário chegar ao fim da tela.
+  Future getMangaChapters(MangaSlimeEntity manga, int? page) async {
+    emit(MangaPageLoading());
+
+    if (manga.bookID != null) {
+      chapter = await Modular.get<GetChapters>()(GetChaptersParams(idSerie: manga.bookID!, bookName: manga.bookName ?? '')).then((value) => value.fold((l) => null, (r) => r));
+      // capsOriginal = chapter?.bookInfo?.bookTemp?[0].bookTempCaps?.map((e) => e.btcCap.toString()).toList() ?? [];
+      capsOriginalObj = chapter?.bookInfo?.bookTemp?[0].bookTempCaps?.map((e) => e).toList() ?? [];
+      // caps = capsOriginal;
+      caps = capsOriginalObj;
+      // print(capsOriginal.length);
+      // log(chapter.toString());
     }
+    emit(MangaPageInitial());
   }
 }

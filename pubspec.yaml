@@ -37,6 +37,8 @@ dependencies:
   media_kit_libs_video: ^1.0.1         
   internet_connection_checker_plus: ^2.0.0
   cached_network_image: ^3.3.0
+  flutter_avif: ^1.0.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

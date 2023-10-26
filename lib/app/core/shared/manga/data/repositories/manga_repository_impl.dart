@@ -1,10 +1,9 @@
 import 'package:anime_app/app/core/common/errors/failures.dart';
 import 'package:anime_app/app/core/common/services/treater/treater_service.dart';
 import 'package:anime_app/app/core/shared/manga/data/datasources/datasource/manga_datasource.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/chapter_model.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_release_model.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/images_model.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/manga_model.dart';
+import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
+import 'package:anime_app/app/core/shared/manga/data/models/manga_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/domain/repositories/manga_repository.dart';
 import 'package:dartz/dartz.dart';
 
@@ -14,8 +13,8 @@ class MangaRepositoryImpl extends MangaRepository {
   MangaRepositoryImpl({required this.datasource});
 
   @override
-  Future<Either<Failure, List<MangaModel>>> search(String value) {
-    return TreaterService()<List<MangaModel>>(
+  Future<Either<Failure, List<MangaSlimeModel>>> search(String value) {
+    return TreaterService()<List<MangaSlimeModel>>(
       () async {
         return await datasource.search(value);
       },
@@ -24,20 +23,20 @@ class MangaRepositoryImpl extends MangaRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChapterModel>>> getChapters(int? page, int idSerie) {
-    return TreaterService()<List<ChapterModel>>(
+  Future<Either<Failure, ChapterSlimeModel>> getChapters(String bookName, int idSerie) {
+    return TreaterService()<ChapterSlimeModel>(
       () async {
-        return await datasource.getChapters(page, idSerie);
+        return await datasource.getChapters(bookName, idSerie);
       },
       errorIdentification: 'Erro ao buscar capitulos',
     );
   }
 
   @override
-  Future<Either<Failure, List<ImagesModel>>> getImages(int idRelease) {
-    return TreaterService()<List<ImagesModel>>(
+  Future<Either<Failure, List<String>>> getImages(int mangaId, String cap) {
+    return TreaterService()<List<String>>(
       () async {
-        return await datasource.getImages(idRelease);
+        return await datasource.getImages(mangaId, cap);
       },
       errorIdentification: 'Erro ao buscar imagens do capitulo',
     );

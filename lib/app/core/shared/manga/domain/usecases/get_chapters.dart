@@ -1,28 +1,28 @@
 import 'package:anime_app/app/core/common/errors/failures.dart';
 import 'package:anime_app/app/core/common/features/usecases/usecase.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/chapter_entity.dart';
+import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/domain/repositories/manga_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class GetChapters extends Usecase<List<ChapterEntity>, GetChaptersParams> {
+class GetChapters extends Usecase<ChapterSlimeModel, GetChaptersParams> {
   final MangaRepository repository;
 
   GetChapters({required this.repository});
 
   @override
-  Future<Either<Failure, List<ChapterEntity>>> call(
+  Future<Either<Failure, ChapterSlimeModel>> call(
     GetChaptersParams params,
   ) async {
-    return await repository.getChapters(params.page, params.idSerie);
+    return await repository.getChapters(params.bookName, params.idSerie);
   }
 }
 
 class GetChaptersParams {
-  final int? page;
+  final String bookName;
   final int idSerie;
 
   GetChaptersParams({
-    required this.page,
+    required this.bookName,
     required this.idSerie,
   });
 }

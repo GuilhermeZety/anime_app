@@ -1,10 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:anime_app/app/core/common/constants/app_constants.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/shared/manga/data/datasources/datasource/manga_datasource.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/chapter_model.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_release_model.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/images_model.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/manga_model.dart';
+import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
+import 'package:anime_app/app/core/shared/manga/data/models/manga_slime_model.dart';
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart';
 
@@ -15,66 +17,103 @@ class MangaLivreDatasourceImpl extends MangaDatasource {
 
   MangaLivreDatasourceImpl({required this.requestService});
 
-  @override
-  Future<List<MangaModel>> search(String value) async {
-    final form = FormData.fromMap({'search': value});
-    final response = await dio.post(
-      AppConstants.search,
-      options: Options(
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
-          'Content-Type': 'multipart/form-data',
-        },
-      ),
-      data: form,
-    );
-
-    List<MangaModel> listMangas = [];
-
-    for (var manga in response.data['series']) {
-      listMangas.add(MangaModel.fromMap(manga));
+  Future<String> getNextData() async {
+    var response = await requestService.get('https://slimeread.com/');
+    if (response.data != null) {
+      var document = parse(response.data);
+      // print(document.body?.outerHtml);
+      var next = document.querySelector('#__NEXT_DATA__');
+      var json = jsonDecode(next?.text ?? '');
+      return json['buildId'];
     }
-
-    return listMangas;
+    return '';
   }
 
   @override
-  Future<List<ChapterModel>> getChapters(int? page, int idSerie) async {
-    final response = await requestService.post(
-      '${AppConstants.baseUrl}/series/chapters_list.json?page=${page ?? 1}&id_serie=$idSerie',
+  Future<List<MangaSlimeModel>> search(String value) async {
+    final response = await requestService.get(
+      'https://slimeread.com/api/book/search?query=$value',
       headers: {
-        'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
+        'Content-Type': 'application/json',
       },
     );
-
-    List<ChapterModel> listChapters = [];
-
-    if (response.data['chapters'] == false) {
+    // final form = FormData.fromMap({'search': value});
+    // final response = await dio.post(
+    //   AppConstants.search,
+    //   options: Options(
+    //     headers: {
+    //       'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //   ),
+    //   data: form,
+    // );
+    if (response.statusCode != 200 || response.data == null) {
       return [];
     }
-    for (var manga in response.data['chapters']) {
-      listChapters.add(ChapterModel.fromMap(manga));
+    List<MangaSlimeModel> mangas = [];
+    for (var manga in response.data) {
+      if (manga != null) {
+        var resp = MangaSlimeModel.fromMap(manga);
+        mangas.add(resp);
+      }
     }
-
-    return listChapters;
+    return mangas;
+    // for (var manga in response.data['series']) {
+    // listMangas.add(MangaModel.fromMap(manga));
+    // }
   }
 
   @override
-  Future<List<ImagesModel>> getImages(int idRelease) async {
-    final response = await requestService.post(
-      '${AppConstants.baseUrl}/leitor/pages/$idRelease.json',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
-      },
+  Future<ChapterSlimeModel> getChapters(String bookName, int idSerie) async {
+    // final response = await requestService.post(
+    //   '${AppConstants.baseUrl}/series/chapters_list.json?page=${page ?? 1}&id_serie=$idSerie',
+    //   headers: {
+    //     'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
+    //   },
+    // );
+
+    // if (response.data['chapters'] == false) {
+    //   return [];
+    // }
+    // for (var manga in response.data['chapters']) {
+    //   listChapters.add(ChapterModel.fromMap(manga));
+    // }
+    var next = await getNextData();
+    final response = await requestService.get(
+      'https://slimeread.com/_next/data/$next/manga/$idSerie/$bookName.json?book_id=$idSerie&book_id=$bookName',
     );
+    var manga = ChapterSlimeModel.fromMap(response.data['pageProps']);
+    return manga;
+  }
 
-    List<ImagesModel> listImages = [];
+  @override
+  Future<List<String>> getImages(int mangaId, String cap) async {
+    List<String> images = [];
+    final response = await requestService.get(
+      'https://apiv2.slimeread.com:8443/book_cap_units?manga_id=$mangaId&cap=$cap',
+    );
+    // final response = await requestService.post(
+    //   '${AppConstants.baseUrl}/leitor/pages/$idRelease.json',
+    //   headers: {
+    //     'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
+    //   },
+    // );
 
-    for (var manga in response.data['images']) {
-      listImages.add(ImagesModel.fromMap(manga));
+    // List<ImagesModel> listImages = [];
+
+    // for (var manga in response.data['images']) {
+    //   listImages.add(ImagesModel.fromMap(manga));
+    // }
+    if (response.data != null) {
+      List maps = response.data['book_temp'][0]['book_temp_caps'][0]['book_temp_cap_unit'];
+      for (var image in maps) {
+        images.add('https://objects.slimeread.com/${image['btcu_image']}');
+      }
+      log(images.toString());
     }
 
-    return listImages;
+    return images;
   }
 
   @override

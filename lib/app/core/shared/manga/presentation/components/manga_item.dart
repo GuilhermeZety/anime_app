@@ -2,7 +2,7 @@ import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
+import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class MangaItem extends StatefulWidget {
   const MangaItem({super.key, this.manga, this.page});
 
-  final MangaEntity? manga;
+  final MangaSlimeEntity? manga;
   final int? page;
 
   @override
@@ -19,16 +19,9 @@ class MangaItem extends StatefulWidget {
 }
 
 class _MangaItemState extends State<MangaItem> {
-  String? imagem;
-
   @override
   void initState() {
     super.initState();
-    if (widget.manga != null && widget.manga!.cover != null && widget.manga!.cover!.contains('static')) {
-      imagem = widget.manga!.cover;
-    } else {
-      imagem = null;
-    }
   }
 
   bool hooved = false;
@@ -82,7 +75,7 @@ class _MangaItemState extends State<MangaItem> {
                       Positioned.fill(
                         child: Padding(
                           padding: const EdgeInsets.all(1),
-                          child: imagem != null ? ImageCached(url: widget.manga!.cover!) : const Center(child: Text('Sem imagem!')),
+                          child: widget.manga?.bookImage != null ? ImageCached(url: widget.manga!.bookImage!) : const Center(child: Text('Sem imagem!')),
                         ),
                       ),
                       Positioned.fill(
@@ -143,7 +136,7 @@ class _MangaItemState extends State<MangaItem> {
                       10,
                     ),
                     child: AutoSizeText(
-                      widget.manga?.name ?? '',
+                      widget.manga?.bookNameOriginal ?? '',
                       maxLines: 2,
                       style: TextStyle(
                         overflow: TextOverflow.ellipsis,
@@ -153,7 +146,7 @@ class _MangaItemState extends State<MangaItem> {
                       ),
                     ),
                   ),
-                ).tooltip(widget.manga?.name ?? ''),
+                ).tooltip(widget.manga?.bookNameOriginal ?? ''),
               ],
             ),
           ),

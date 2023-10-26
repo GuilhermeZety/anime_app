@@ -59,7 +59,7 @@ class _InitialPageState extends State<InitialPage> {
       leading: const SizedBox(),
       backgroundColor: AppColors.grey_700.withOpacity(0.5),
       elevation: 0,
-      expandedHeight: 90,
+      expandedHeight: 100,
       collapsedHeight: 90,
       flexibleSpace: Padding(
         padding: const EdgeInsets.all(20),
@@ -73,7 +73,7 @@ class _InitialPageState extends State<InitialPage> {
               ),
               onSubmit: (_) => Modular.to.pushNamed(AppRoutes.search, arguments: controller),
               hint: 'Insira o nome do anime',
-            ).hero('search'),
+            ).hero('search').expanded(),
           ],
         ),
       ),

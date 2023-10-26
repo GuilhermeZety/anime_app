@@ -7,11 +7,12 @@ import 'package:anime_app/app/core/common/services/requests/request_service.dart
 import 'package:anime_app/app/core/common/utils/toasting.dart';
 import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
 import 'package:anime_app/app/core/shared/anime/domain/entities/anime/anime_entity.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
+import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/core/shared/manga/manga_logic.dart';
 import 'package:anime_app/app/modules/anime/presentation/anime_page.dart';
 import 'package:anime_app/app/modules/home/home_module.dart';
 import 'package:anime_app/app/modules/manga/home/presentation/manga_page.dart';
+import 'package:anime_app/app/modules/manga/home/presentation/pages/initial/aloalo.dart';
 import 'package:anime_app/app/modules/manga/manga_home_module.dart';
 import 'package:anime_app/app/modules/manga/read/presentation/read_page.dart';
 import 'package:anime_app/app/modules/manga/search/presentation/manga_search_page.dart';
@@ -116,12 +117,13 @@ class AppModule extends Module {
     r.child(
       '/manga/',
       child: (args) {
-        if (r.args.data == null || r.args.data is! MangaEntity) {
-          Toasting.warning(args, message: 'Erro ao obter dados do anime');
+        if (r.args.data == null) {
+          Toasting.warning(args, message: 'Erro ao obter dados do manga');
           return const SizedBox();
         }
+        // return const Aloalo();
         return MangaPage(
-          manga: r.args.data as MangaEntity,
+          manga: r.args.data as MangaSlimeEntity,
         );
       },
       transition: TransitionType.fadeIn,
@@ -129,12 +131,12 @@ class AppModule extends Module {
     r.child(
       '/read/',
       child: (args) {
-        if (r.args.data == null || r.args.data is! int) {
+        if (r.args.data == null || r.args.data is! Map<String, dynamic>) {
           Toasting.warning(args, message: 'Erro ao obter dados do anime');
           return const SizedBox();
         }
         return ReadPage(
-          idRelease: r.args.data as int,
+          cap: r.args.data as Map<String, dynamic>,
         );
       },
       transition: TransitionType.fadeIn,

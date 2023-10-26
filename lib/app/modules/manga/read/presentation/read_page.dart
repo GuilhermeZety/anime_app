@@ -4,14 +4,15 @@ import 'package:anime_app/app/modules/manga/read/presentation/cubit/read_page_cu
 import 'package:anime_app/app/ui/components/button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_avif/flutter_avif.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:gap/gap.dart';
 
 class ReadPage extends StatefulWidget {
-  const ReadPage({super.key, required this.idRelease});
+  const ReadPage({super.key, required this.cap});
 
-  final int idRelease;
+  final Map<String, dynamic> cap;
 
   @override
   State<ReadPage> createState() => _ReadPageState();
@@ -21,17 +22,20 @@ class _ReadPageState extends State<ReadPage> {
   final ReadPageCubit cubit = ReadPageCubit();
   double? largura;
   double? altura;
+  double? alturaContainer;
+  BoxFit? boxFit;
 
   @override
   void initState() {
     super.initState();
-    cubit.init(widget.idRelease);
+    cubit.init(widget.cap['mangaID'], widget.cap['cap'].toString());
   }
 
   @override
   Widget build(BuildContext context) {
     largura = context.width;
     altura = context.height;
+    alturaContainer = 800;
     return BlocBuilder<ReadPageCubit, ReadPageState>(
       bloc: cubit,
       builder: (context, state) {
@@ -48,20 +52,39 @@ class _ReadPageState extends State<ReadPage> {
                       child: ListView.builder(
                         itemCount: cubit.listImages!.length,
                         itemBuilder: (context, index) {
-                          return CachedNetworkImage(
-                            imageUrl: cubit.listImages![index].legacy ?? '',
-                            fit: BoxFit.fitHeight,
-                            placeholder: (context, url) => SizedBox(
-                              height: altura,
-                              width: largura,
-                              child: const Center(
-                                child: CircularProgressIndicator(),
+                          if (cubit.listImages![index].endsWith('.avif')) {
+                            return Container(
+                              color: AppColors.grey_200,
+                              height: alturaContainer,
+                              // width: context.width,
+                              child: AvifImage.network(
+                                cubit.listImages![index],
+                                fit: boxFit,
+                                // fit: BoxFit.fitWidth,
+                                // width: largura,
+                                // cacheWidth: largura?.toInt(),
+                                // cacheHeight: altura?.toInt(),
+                                // cacheWidth: largura?.toInt(),
+                                // height: altura,
+                                // width: largura,
                               ),
-                            ), // Exemplo de placeholder
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.error,
-                            ), // Exemplo de widget de erro
-                          );
+                            );
+                          } else {
+                            return CachedNetworkImage(
+                              imageUrl: cubit.listImages![index],
+                              fit: BoxFit.fitHeight,
+                              placeholder: (context, url) => SizedBox(
+                                height: altura,
+                                width: largura,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ), // Exemplo de placeholder
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.error,
+                              ), // Exemplo de widget de erro
+                            );
+                          }
                         },
                       ),
                     ),
@@ -96,8 +119,12 @@ class _ReadPageState extends State<ReadPage> {
                             // Modular.to.pop();
                             if (largura == context.width * 0.6) {
                               largura = context.width;
+                              alturaContainer = 1500;
+                              boxFit = BoxFit.cover;
                             } else {
                               largura = context.width * 0.6;
+                              alturaContainer = 980;
+                              boxFit = BoxFit.fitHeight;
                             }
                             cubit.setState();
                           },

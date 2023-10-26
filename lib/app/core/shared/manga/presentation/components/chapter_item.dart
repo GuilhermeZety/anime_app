@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/chapter_entity.dart';
-// import 'package:anime_app/app/core/shared/anime/anime_logic.dart';
+import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/domain/entities/chapter_release_entity.dart';
 import 'package:anime_app/app/core/shared/manga/domain/usecases/get_chapters.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
@@ -34,7 +35,7 @@ class _ChapterItemState extends State<ChapterItem> {
     }
 
     if (widget.manga != null && widget.manga!.image != null && widget.manga!.image!.contains('static')) {
-      imagem = widget.manga!.image;
+      imagem = widget.manga!.imageThumb;
     } else {
       imagem = null;
     }
@@ -72,8 +73,8 @@ class _ChapterItemState extends State<ChapterItem> {
         },
         onTap: () async {
           if (cap != null) {
-            List<ChapterEntity>? resp = await Modular.get<GetChapters>()(GetChaptersParams(page: 1, idSerie: cap!)).then((value) => value.fold((l) => null, (r) => r));
-            Modular.to.pushNamed(AppRoutes.read, arguments: resp?.first.release?.scanId);
+            ChapterSlimeModel? resp = await Modular.get<GetChapters>()(GetChaptersParams(bookName: '', idSerie: cap!)).then((value) => value.fold((l) => null, (r) => r));
+            Modular.to.pushNamed(AppRoutes.read, arguments: resp?.mangaId);
           }
         },
         child: Center(
@@ -93,7 +94,7 @@ class _ChapterItemState extends State<ChapterItem> {
                       Positioned.fill(
                         child: Padding(
                           padding: const EdgeInsets.all(1),
-                          child: imagem != null ? ImageCached(url: widget.manga!.image!) : const Center(child: Text('Sem imagem!')),
+                          child: imagem != null ? ImageCached(url: widget.manga!.imageThumb!) : const Center(child: Text('Sem imagem!')),
                         ),
                       ),
                       Positioned.fill(
@@ -127,7 +128,7 @@ class _ChapterItemState extends State<ChapterItem> {
                           children: [
                             ...widget.manga!.chapters!.map(
                               (e) => GestureDetector(
-                                onTap: () => print(e.number),
+                                onTap: () => log(e.number.toString()),
                                 child: Tag(
                                   text: 'EP ${e.number}',
                                 ),

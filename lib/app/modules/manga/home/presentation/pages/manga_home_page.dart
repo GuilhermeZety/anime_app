@@ -71,6 +71,7 @@ class _MangaHomePageState extends State<MangaHomePage> with SingleTickerProvider
         controller: _cubit.controller,
         children: const [
           MangaInitialPage(),
+          // Aloalo(),
         ],
       );
 }

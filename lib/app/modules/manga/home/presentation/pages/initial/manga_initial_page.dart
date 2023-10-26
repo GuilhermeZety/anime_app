@@ -27,7 +27,6 @@ class _MangaInitialPageState extends State<MangaInitialPage> {
   void initState() {
     super.initState();
     _cubit.init();
-    
   }
 
   @override
@@ -120,7 +119,6 @@ class _MangaInitialPageState extends State<MangaInitialPage> {
             else
               ..._cubit.releases
                   .map(
-                    // (e) => EpisodeItem(episode: e).animate().fade(),
                     (e) => ChapterItem(manga: e).animate().fade(),
                   )
                   .toList(),

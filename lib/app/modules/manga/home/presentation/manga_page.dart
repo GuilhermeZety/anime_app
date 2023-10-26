@@ -2,10 +2,11 @@ import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
+import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/modules/manga/manga/presentation/cubit/manga_page_cubit.dart';
 import 'package:anime_app/app/ui/components/button.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
+import 'package:anime_app/app/ui/components/input.dart';
 import 'package:anime_app/app/ui/components/panel.dart';
 import 'package:anime_app/app/ui/components/shimed_box.dart';
 import 'package:flextras/flextras.dart';
@@ -13,11 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 class MangaPage extends StatefulWidget {
   const MangaPage({super.key, required this.manga});
 
-  final MangaEntity manga;
+  final MangaSlimeEntity manga;
 
   @override
   State<MangaPage> createState() => _MangaPageState();
@@ -30,8 +32,6 @@ class _MangaPageState extends State<MangaPage> {
   void initState() {
     super.initState();
     cubit.init(widget.manga);
-
-    cubit.scrollController.addListener(cubit.onScroll);
   }
 
   @override
@@ -42,18 +42,17 @@ class _MangaPageState extends State<MangaPage> {
         backgroundColor: AppColors.grey_500,
         elevation: 0,
       ),
-      body: BlocBuilder(
-        bloc: cubit,
-        builder: (context, state) {
-          return Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 1200,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: SingleChildScrollView(
-                  controller: cubit.scrollController,
+      body: SingleChildScrollView(
+        child: BlocBuilder(
+          bloc: cubit,
+          builder: (context, state) {
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 1200,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
                       Panel(
@@ -65,7 +64,7 @@ class _MangaPageState extends State<MangaPage> {
                                   return Column(
                                     children: [
                                       Text(
-                                        '${widget.manga.name}',
+                                        '${widget.manga.bookNameOriginal}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -85,7 +84,7 @@ class _MangaPageState extends State<MangaPage> {
                                 return Column(
                                   children: [
                                     Text(
-                                      '${widget.manga.name}',
+                                      '${widget.manga.bookNameOriginal}',
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -113,100 +112,109 @@ class _MangaPageState extends State<MangaPage> {
                           ],
                         ),
                       ),
-                      Button(
-                        onPressed: () async {
-                          cubit.getMangaChaptersReverse(widget.manga);
-                        },
-                        child: const Text('reverse'),
+                      // Button(
+                      //   onPressed: () async {
+                      //     cubit.getMangaChaptersReverse(widget.manga);
+                      //   },
+                      //   child: const Text('reverse'),
+                      // ),
+                      const Gap(20),
+                      Panel(
+                        child: Column(
+                          children: [
+                            Input(
+                              label: 'Procurar capítulo:',
+                              cubit.controller,
+                              onChange: (value) => cubit.search(cubit.controller.text),
+                            ),
+                            const Gap(20),
+                            const Panel(
+                              width: 200,
+                              color: AppColors.grey_400,
+                              child: Center(
+                                child: Text(
+                                  'CAPÍTULOS',
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ),
+                            ),
+                            const Gap(20),
+                            SizedBox(
+                              width: context.width * 0.9,
+                              height: 400,
+                              child: _buildManga,
+                            ),
+                          ],
+                        ),
                       ),
-                      _buildMangas,
                     ],
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget get _buildMangas {
-    return Column(
-      children: [
-        ...cubit.listChapters?.map(
-              (e) => Padding(
-                padding: const EdgeInsets.all(3),
-                child: Panel(
-                  onTap: () {
-                    Modular.to.pushNamed(
-                      AppRoutes.read,
-                      arguments: e.release?.scanId,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 75,
-                              decoration: BoxDecoration(
-                                color: AppColors.grey_500,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 10,
-                                    offset: Offset(0, -1),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: Center(
-                                  child: Text(
-                                    e.date ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Gap(10),
-                            SizedBox(
-                              width: context.width * 0.5,
-                              child: Text(
-                                e.chapterName ?? '',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ).expanded(),
-                          ],
-                        ).expanded(),
-                        Text(
-                          '${e.number}',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+  String cutInt(String cap) {
+    if (cap.endsWith('.0')) {
+      return cap.substring(0, cap.length - 2);
+    }
+    return cap;
+  }
+
+  Widget get _buildManga {
+    var qtd = ((context.width - 40) / (context.isLandscape ? 250 : 210)).floor().abs();
+    if (qtd > 6) {
+      qtd = 6;
+    }
+    if (qtd == 0) {
+      qtd = 1;
+    }
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: qtd, crossAxisSpacing: 5, mainAxisSpacing: 5, mainAxisExtent: 100),
+      itemCount: cubit.caps.length,
+      itemBuilder: (BuildContext context, int index) {
+        // var item = cubit.chapter?.bookInfo?.bookTemp?[0].bookTempCaps;
+        var date = DateTime.parse(cubit.caps[index].btcDateUpdated.toString());
+        var hoje = DateTime.now();
+        var dateCap = DateFormat('dd/MM/yyyy').format(date);
+        return Padding(
+          padding: const EdgeInsets.all(3),
+          child: Panel(
+            color: AppColors.grey_300,
+            onTap: () {
+              Modular.to.pushNamed(
+                AppRoutes.read,
+                arguments: {'cap': cubit.caps[index].btcCap, 'mangaID': cubit.chapter?.mangaId},
+              );
+            },
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    (date.day == hoje.day && date.month == hoje.month && date.year == hoje.year) ? 'Hoje' : dateCap,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  Text(
+                    'Cap: ${cutInt(cubit.caps[index].btcCap.toString())}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-            ) ??
-            [],
-      ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -215,7 +223,7 @@ class _MangaPageState extends State<MangaPage> {
       height: 300,
       width: 200,
       child: ImageCached(
-        url: widget.manga.coverThumb ?? '',
+        url: widget.manga.bookImage ?? '',
         radius: 20,
       ),
     );
@@ -247,19 +255,20 @@ class _MangaPageState extends State<MangaPage> {
         ],
       );
     }
-    var mangadata = widget.manga;
+    // var mangadata = widget.manga;
     return SeparatedColumn(
       separatorBuilder: () => const Divider(),
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildItemData('Autor', mangadata.author ?? ''),
-        _buildItemData('Score', mangadata.score ?? ''),
-        _buildItemData('Está completo? ', mangadata.isComplete == true ? 'Sim' : 'Não'),
+      children: const [
+        // _buildItemData('Autor', mangadata.author ?? ''),
+        // _buildItemData('Score', mangadata.score ?? ''),
+        // _buildItemData('Está completo? ', mangadata.isComplete == true ? 'Sim' : 'Não'),
       ],
     );
   }
 
+  // ignore: unused_element
   Widget _buildItemData(String title, String data, {Color? colorData}) {
     return Row(
       children: [
@@ -295,7 +304,7 @@ class _MangaPageState extends State<MangaPage> {
               ).expandedH();
             }
             return Text(
-              cubit.description ?? '',
+              cubit.chapter?.bookInfo?.bookSinopsis ?? '',
               style: const TextStyle(
                 fontSize: 10,
                 color: AppColors.grey_200,

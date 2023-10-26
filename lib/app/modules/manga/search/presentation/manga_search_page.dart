@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
+import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/core/shared/manga/domain/usecases/search_manga.dart';
 import 'package:anime_app/app/core/shared/manga/presentation/components/manga_item.dart';
 import 'package:anime_app/app/ui/components/input_search.dart';
@@ -24,7 +24,7 @@ class MangaSearchPage extends StatefulWidget {
 }
 
 class _MangaSearchPageState extends State<MangaSearchPage> {
-  List<MangaEntity> mangas = [];
+  List<MangaSlimeEntity> mangas = [];
   bool loading = true;
 
   @override
