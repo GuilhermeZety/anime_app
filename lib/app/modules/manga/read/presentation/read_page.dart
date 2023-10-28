@@ -29,7 +29,7 @@ class _ReadPageState extends State<ReadPage> {
   @override
   void initState() {
     super.initState();
-    cubit.init(widget.cap['mangaID'], widget.cap['cap'].toString(), widget.cap['capList']);
+    cubit.init(widget.cap['mangaID'], widget.cap['cap'].toString(), widget.cap['capList'], widget.cap['initial']);
   }
 
   String? cutInt(String? cap) {
@@ -124,20 +124,26 @@ class _ReadPageState extends State<ReadPage> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Button(
-                          onPressed: () async {
-                            cubit.prevCap();
-                          },
-                          child: const Icon(Icons.arrow_left),
-                        ),
-                        const Gap(10),
-                        Button(
-                          onPressed: () async {
-                            cubit.nextCap();
-                          },
-                          child: const Icon(Icons.arrow_right),
-                        ),
-                        const Gap(10),
+                        widget.cap['initial'] == true
+                            ? const SizedBox.shrink()
+                            : Row(
+                                children: [
+                                  Button(
+                                    onPressed: () async {
+                                      cubit.prevCap();
+                                    },
+                                    child: const Icon(Icons.arrow_left),
+                                  ),
+                                  const Gap(10),
+                                  Button(
+                                    onPressed: () async {
+                                      cubit.nextCap();
+                                    },
+                                    child: const Icon(Icons.arrow_right),
+                                  ),
+                                  const Gap(10),
+                                ],
+                              ),
                         Button(
                           onPressed: () async {
                             // Modular.to.pop();

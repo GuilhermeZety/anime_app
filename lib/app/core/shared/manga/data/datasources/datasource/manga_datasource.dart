@@ -1,4 +1,3 @@
-import 'package:anime_app/app/core/shared/manga/data/models/chapter_release_model.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/manga_slime_model.dart';
 

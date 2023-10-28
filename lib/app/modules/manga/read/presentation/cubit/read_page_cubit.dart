@@ -17,12 +17,16 @@ class ReadPageCubit extends Cubit<ReadPageState> {
 
   String? message;
 
-  void init(String mangaId, String cap, List<BookTempCapsEntity>? caps) async {
+  void init(String mangaId, String cap, List<BookTempCapsEntity>? caps, bool? initial) async {
     emit(ReadPageLoading());
+    if (initial != true) {
+      capAtual = caps?.firstWhere((element) => element.btcCap.toString() == cap);
+      capsList = caps ?? [];
+      index = capsList.indexOf(capAtual!);
+    } else {
+      capAtual = BookTempCapsEntity(btcCap: double.parse(cap), btcDateUpdated: null);
+    }
     mangaIdButton = mangaId;
-    capAtual = caps?.firstWhere((element) => element.btcCap.toString() == cap);
-    capsList = caps ?? [];
-    index = capsList.indexOf(capAtual!);
     listImages = await Modular.get<GetImages>()(GetImagesParams(mangaId: int.parse(mangaId), cap: cap)).then((value) => value.fold((l) => null, (r) => r));
     emit(ReadPageInitial());
   }

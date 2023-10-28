@@ -119,7 +119,7 @@ class _MangaInitialPageState extends State<MangaInitialPage> {
             else
               ..._cubit.releases
                   .map(
-                    (e) => ChapterItem(manga: e).animate().fade(),
+                    (e) => ChapterItem(manga: e, initial: true).animate().fade(),
                   )
                   .toList(),
           ],

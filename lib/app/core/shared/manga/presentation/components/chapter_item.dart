@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
-import 'package:anime_app/app/ui/components/image_cached.dart';
 import 'package:anime_app/app/ui/components/tag.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,10 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ChapterItem extends StatefulWidget {
-  const ChapterItem({super.key, this.manga, this.page});
+  const ChapterItem({super.key, this.manga, this.page, this.initial});
 
   final BookInfoModel? manga;
   final int? page;
+  final bool? initial;
 
   @override
   State<ChapterItem> createState() => _ChapterItemState();
@@ -82,7 +80,10 @@ class _ChapterItemState extends State<ChapterItem> {
         onTap: () async {
           if (widget.manga?.bookId != null && widget.manga?.bookTemp != null) {
             // ChapterSlimeModel? resp = await Modular.get<GetChapters>()(GetChaptersParams(bookName: '', idSerie: cap!)).then((value) => value.fold((l) => null, (r) => r));
-            Modular.to.pushNamed(AppRoutes.read, arguments: {'cap': widget.manga?.bookTemp?[0].bookTempCaps?[0].btcCap.toString(), 'mangaID': widget.manga?.bookId.toString()});
+            Modular.to.pushNamed(
+              AppRoutes.read,
+              arguments: {'cap': widget.manga?.bookTemp?[0].bookTempCaps?[0].btcCap.toString(), 'mangaID': widget.manga?.bookId.toString(), 'initial': widget.initial ?? false},
+            );
           }
         },
         child: Center(
@@ -103,7 +104,7 @@ class _ChapterItemState extends State<ChapterItem> {
                         child: Padding(
                           padding: const EdgeInsets.all(1),
                           child: widget.manga?.bookImage != null
-                              ? CachedNetworkImage(imageUrl: widget.manga!.bookImage!, errorWidget: (context, url, error) => const Center(child: Text('Sem imagem!')))
+                              ? CachedNetworkImage(fit: BoxFit.fitHeight, imageUrl: widget.manga!.bookImage!, errorWidget: (context, url, error) => const Center(child: Text('Sem imagem!')))
                               : const Center(child: Text('Sem imagem!')),
                         ),
                       ),
@@ -151,7 +152,7 @@ class _ChapterItemState extends State<ChapterItem> {
                         right: 10,
                         top: 10,
                         child: Tag(
-                          text: 'EP ${cutInt(widget.manga?.bookTemp?[0].bookTempCaps?[0].btcCap.toString())}',
+                          text: 'EP ${cutInt(((widget.manga?.bookTemp?[0].bookTempCaps?[0].btcCap)! + 1.0).toString())}',
                         ),
                       ),
                     ],

@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:anime_app/app/core/common/constants/app_constants.dart';
 import 'package:anime_app/app/core/common/services/requests/request_service.dart';
 import 'package:anime_app/app/core/shared/manga/data/datasources/datasource/manga_datasource.dart';
-import 'package:anime_app/app/core/shared/manga/data/models/chapter_release_model.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/manga_slime_model.dart';
 import 'package:dio/dio.dart';
