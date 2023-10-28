@@ -43,8 +43,8 @@ class MangaRepositoryImpl extends MangaRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChapterReleaseModel>>> getReleasesMangas(int page) {
-    return TreaterService()<List<ChapterReleaseModel>>(
+  Future<Either<Failure, List<BookInfoModel>>> getReleasesMangas(int page) {
+    return TreaterService()<List<BookInfoModel>>(
       () async {
         return await datasource.getReleasesMangas(page);
       },

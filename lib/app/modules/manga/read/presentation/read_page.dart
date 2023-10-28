@@ -1,5 +1,6 @@
 import 'package:anime_app/app/core/common/constants/app_colors.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
+import 'package:anime_app/app/core/common/utils/toasting.dart';
 import 'package:anime_app/app/modules/manga/read/presentation/cubit/read_page_cubit.dart';
 import 'package:anime_app/app/ui/components/button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,12 +24,21 @@ class _ReadPageState extends State<ReadPage> {
   double? largura;
   double? altura;
   double? alturaContainer;
-  BoxFit? boxFit;
+  BoxFit boxFit = BoxFit.fitHeight;
 
   @override
   void initState() {
     super.initState();
-    cubit.init(widget.cap['mangaID'], widget.cap['cap'].toString());
+    cubit.init(widget.cap['mangaID'], widget.cap['cap'].toString(), widget.cap['capList']);
+  }
+
+  String? cutInt(String? cap) {
+    if (cap != null) {
+      if (cap.endsWith('.0')) {
+        return cap.substring(0, cap.length - 2);
+      }
+    }
+    return 'N/A';
   }
 
   @override
@@ -36,8 +46,14 @@ class _ReadPageState extends State<ReadPage> {
     largura = context.width;
     altura = context.height;
     alturaContainer = 800;
-    return BlocBuilder<ReadPageCubit, ReadPageState>(
+    return BlocConsumer<ReadPageCubit, ReadPageState>(
       bloc: cubit,
+      listener: (context, state) => {
+        if (state is ReadPageWarning)
+          {
+            Toasting.warning(context, message: cubit.message),
+          },
+      },
       builder: (context, state) {
         return Stack(
           children: [
@@ -55,7 +71,7 @@ class _ReadPageState extends State<ReadPage> {
                           if (cubit.listImages![index].endsWith('.avif')) {
                             return Container(
                               color: AppColors.grey_200,
-                              height: alturaContainer,
+                              // height: alturaContainer,
                               // width: context.width,
                               child: AvifImage.network(
                                 cubit.listImages![index],
@@ -92,7 +108,7 @@ class _ReadPageState extends State<ReadPage> {
               ),
             ),
             Positioned.fill(
-              bottom: 75,
+              bottom: 25,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -101,17 +117,25 @@ class _ReadPageState extends State<ReadPage> {
                     color: AppColors.grey_600,
                   ),
                   // height: 75,
-                  width: context.width * 0.5,
+                  // width: context.width * 0.5,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Button(
                           onPressed: () async {
-                            Modular.to.pop();
+                            cubit.prevCap();
                           },
-                          child: const Icon(Icons.close),
+                          child: const Icon(Icons.arrow_left),
+                        ),
+                        const Gap(10),
+                        Button(
+                          onPressed: () async {
+                            cubit.nextCap();
+                          },
+                          child: const Icon(Icons.arrow_right),
                         ),
                         const Gap(10),
                         Button(
@@ -120,7 +144,7 @@ class _ReadPageState extends State<ReadPage> {
                             if (largura == context.width * 0.6) {
                               largura = context.width;
                               alturaContainer = 1500;
-                              boxFit = BoxFit.cover;
+                              boxFit = BoxFit.fitHeight;
                             } else {
                               largura = context.width * 0.6;
                               alturaContainer = 980;
@@ -128,11 +152,37 @@ class _ReadPageState extends State<ReadPage> {
                             }
                             cubit.setState();
                           },
-                          child: const Icon(Icons.settings),
+                          child: const Icon(
+                            Icons.menu_book,
+                          ),
                         ),
                       ],
                     ),
                   ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              top: 20,
+              left: 20,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Button(
+                  onPressed: () async {
+                    Modular.to.pop();
+                  },
+                  child: const Icon(Icons.arrow_back),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              top: 20,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.black.withOpacity(0.5)),
+                  child: Text('Cap: ${cutInt((cubit.capAtual!.btcCap! + 1.0).toString())}', style: const TextStyle(inherit: false, fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                 ),
               ),
             ),

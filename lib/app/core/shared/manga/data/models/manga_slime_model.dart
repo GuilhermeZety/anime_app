@@ -101,7 +101,7 @@ class BookTempModel extends BookTempEntity {
     };
   }
 
-  factory BookTempModel.fromMap(Map<String, dynamic> map) {
+  factory BookTempModel.  fromMap(Map<String, dynamic> map) {
     return BookTempModel(
       btSeason: map['bt_season'] != null ? map['bt_season'] as int : null,
       bookTempCaps: map['book_temp_caps'] != null

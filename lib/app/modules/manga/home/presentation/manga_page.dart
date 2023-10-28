@@ -188,7 +188,7 @@ class _MangaPageState extends State<MangaPage> {
             onTap: () {
               Modular.to.pushNamed(
                 AppRoutes.read,
-                arguments: {'cap': cubit.caps[index].btcCap, 'mangaID': cubit.chapter?.mangaId},
+                arguments: {'cap': cubit.caps[index].btcCap, 'mangaID': cubit.chapter?.mangaId, 'capList': cubit.capsOriginalObj},
               );
             },
             child: Center(
@@ -203,7 +203,7 @@ class _MangaPageState extends State<MangaPage> {
                     ),
                   ),
                   Text(
-                    'Cap: ${cutInt(cubit.caps[index].btcCap.toString())}',
+                    'Cap: ${cutInt(((cubit.caps[index].btcCap)! + 1.0).toString())}',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

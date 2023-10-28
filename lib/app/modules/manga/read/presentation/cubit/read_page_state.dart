@@ -11,3 +11,6 @@ final class ReadPageInitial extends ReadPageState {}
 
 final class ReadPageLoading extends ReadPageState {}
 
+final class ReadPageWarning extends ReadPageState {}
+
+

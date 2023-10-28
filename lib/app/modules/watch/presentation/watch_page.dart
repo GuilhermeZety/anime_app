@@ -9,6 +9,7 @@ import 'package:anime_app/app/core/shared/anime/domain/entities/episode/episode_
 import 'package:anime_app/app/ui/components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
@@ -79,11 +80,24 @@ class _WatchPageState extends State<WatchPage> {
                 right: 30,
                 child: Opacity(
                   opacity: 0.5,
-                  child: Button(
-                    child: const Text('Próximo EP'),
-                    onPressed: () async {
-                      // Modular.to.pushReplacementNamed(AppRoutes.watch, [episodeData, quality, anime]);s
-                    },
+                  child: Row(
+                    children: [
+                      Button(
+                        child: const Text('Pular Op'),
+                        onPressed: () async {
+                          // Modular.to.pushReplacementNamed(AppRoutes.watch, [episodeData, quality, anime]);s
+                          var timeAtual = controller.player.state.position.inSeconds;
+                          controller.player.seek(Duration(seconds: 87 + timeAtual));
+                        },
+                      ),
+                      const Gap(10),
+                      Button(
+                        child: const Text('Próximo EP'),
+                        onPressed: () async {
+                          // Modular.to.pushReplacementNamed(AppRoutes.watch, [episodeData, quality, anime]);s
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),

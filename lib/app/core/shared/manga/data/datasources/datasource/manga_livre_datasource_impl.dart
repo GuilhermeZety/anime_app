@@ -110,27 +110,50 @@ class MangaLivreDatasourceImpl extends MangaDatasource {
       for (var image in maps) {
         images.add('https://objects.slimeread.com/${image['btcu_image']}');
       }
-      log(images.toString());
     }
 
     return images;
   }
 
   @override
-  Future<List<ChapterReleaseModel>> getReleasesMangas(int page) async {
-    final response = await requestService.post(
-      '${AppConstants.baseUrl}/home/releases?page=$page&type=manga',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
-      },
+  Future<List<BookInfoModel>> getReleasesMangas(int page) async {
+    // final response = await requestService.post(
+    //   '${AppConstants.baseUrl}/home/releases?page=$page&type=manga',
+    //   headers: {
+    //     'X-Requested-With': 'XMLHttpRequest', // Corrigido o cabeçalho
+    //   },
+    // );
+
+    // List<ChapterReleaseModel> listReleases = [];
+
+    // for (var manga in response.data['releases']) {
+    //   listReleases.add(ChapterReleaseModel.fromMap(manga));
+    // }
+
+    // return listReleases;
+    var next = await getNextData();
+    final response = await requestService.get(
+      'https://slimeread.com/_next/data/$next/index.json',
     );
+    List maps = response.data['pageProps']['books'];
+    List<BookInfoModel> listReleases = [];
+    for (var i = 0; i < 100; i++) {
+      Map<String, dynamic> manga = {};
+      manga = {
+        'book_name_original': maps[i]['book_name_original'],
+        'book_name': maps[i]['book_name'],
+        'book_image': (maps[i]['book_image'] as String).replaceAll(' ', '%20'),
+        'book_id': maps[i]['book_id'],
+        'book_tag': maps[i]['book_tag'],
+        'book_date_created': maps[i]['book_date_created'],
+        'book_categories': maps[i]['book_categories'],
+        'book_temp': maps[i]['book_temp'],
+        'nsfw': maps[i]['nsfw'],
+      };
+      BookInfoModel model = BookInfoModel.fromMap(manga);
 
-    List<ChapterReleaseModel> listReleases = [];
-
-    for (var manga in response.data['releases']) {
-      listReleases.add(ChapterReleaseModel.fromMap(manga));
+      listReleases.add(model);
     }
-
     return listReleases;
   }
 

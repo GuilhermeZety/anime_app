@@ -25,18 +25,20 @@ class UtilsCapsEntity extends Equatable {
 class BookInfoEntity extends Equatable {
   final String? bookNameOriginal;
   final String? bookName;
+  final int? bookId;
   final String? bookImage;
   final String? bookSinopsis;
   final int? bookStatus;
   final List<BookTempEntity>? bookTemp;
 
-  const BookInfoEntity({required this.bookNameOriginal, required this.bookName, required this.bookImage, required this.bookSinopsis, required this.bookStatus, required this.bookTemp});
+  const BookInfoEntity({required this.bookNameOriginal, required this.bookName, required this.bookId, required this.bookImage, required this.bookSinopsis, required this.bookStatus, required this.bookTemp});
 
   @override
   List<Object?> get props {
     return [
       bookNameOriginal,
       bookName,
+      bookId,
       bookImage,
       bookSinopsis,
       bookStatus,

@@ -14,7 +14,7 @@ class TreaterService {
     if (await ConnectionCheckerPlusServiceImpl().isConnected || !online) {
       try {
         return Right(await code());
-      } on ServerException catch (e) {
+      }   on ServerException catch (e) {
         log(e.toString(), stackTrace: e.stackTrace);
 
         return Left(

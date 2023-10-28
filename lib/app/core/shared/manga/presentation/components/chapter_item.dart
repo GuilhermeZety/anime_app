@@ -5,18 +5,17 @@ import 'package:anime_app/app/core/common/constants/app_routes.dart';
 import 'package:anime_app/app/core/common/extensions/context_extension.dart';
 import 'package:anime_app/app/core/common/extensions/widget_extension.dart';
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
-import 'package:anime_app/app/core/shared/manga/domain/entities/chapter_release_entity.dart';
-import 'package:anime_app/app/core/shared/manga/domain/usecases/get_chapters.dart';
 import 'package:anime_app/app/ui/components/image_cached.dart';
 import 'package:anime_app/app/ui/components/tag.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ChapterItem extends StatefulWidget {
   const ChapterItem({super.key, this.manga, this.page});
 
-  final ChapterReleaseEntity? manga;
+  final BookInfoModel? manga;
   final int? page;
 
   @override
@@ -30,15 +29,24 @@ class _ChapterItemState extends State<ChapterItem> {
   @override
   void initState() {
     super.initState();
-    if (widget.manga?.chapters?.isNotEmpty == true) {
-      cap = widget.manga?.idSerie;
-    }
+    // if (widget.manga?.chapters?.isNotEmpty == true) {
+    //   cap = widget.manga?.idSerie;
+    // }
 
-    if (widget.manga != null && widget.manga!.image != null && widget.manga!.image!.contains('static')) {
-      imagem = widget.manga!.imageThumb;
-    } else {
-      imagem = null;
+    // if (widget.manga != null && widget.manga!.image != null && widget.manga!.image!.contains('static')) {
+    //   imagem = widget.manga!.imageThumb;
+    // } else {
+    //   imagem = null;
+    // }
+  }
+
+  String? cutInt(String? cap) {
+    if (cap != null) {
+      if (cap.endsWith('.0')) {
+        return cap.substring(0, cap.length - 2);
+      }
     }
+    return 'N/A';
   }
 
   bool hooved = false;
@@ -72,9 +80,9 @@ class _ChapterItemState extends State<ChapterItem> {
           if (mounted) setState(() {});
         },
         onTap: () async {
-          if (cap != null) {
-            ChapterSlimeModel? resp = await Modular.get<GetChapters>()(GetChaptersParams(bookName: '', idSerie: cap!)).then((value) => value.fold((l) => null, (r) => r));
-            Modular.to.pushNamed(AppRoutes.read, arguments: resp?.mangaId);
+          if (widget.manga?.bookId != null && widget.manga?.bookTemp != null) {
+            // ChapterSlimeModel? resp = await Modular.get<GetChapters>()(GetChaptersParams(bookName: '', idSerie: cap!)).then((value) => value.fold((l) => null, (r) => r));
+            Modular.to.pushNamed(AppRoutes.read, arguments: {'cap': widget.manga?.bookTemp?[0].bookTempCaps?[0].btcCap.toString(), 'mangaID': widget.manga?.bookId.toString()});
           }
         },
         child: Center(
@@ -94,7 +102,9 @@ class _ChapterItemState extends State<ChapterItem> {
                       Positioned.fill(
                         child: Padding(
                           padding: const EdgeInsets.all(1),
-                          child: imagem != null ? ImageCached(url: widget.manga!.imageThumb!) : const Center(child: Text('Sem imagem!')),
+                          child: widget.manga?.bookImage != null
+                              ? CachedNetworkImage(imageUrl: widget.manga!.bookImage!, errorWidget: (context, url, error) => const Center(child: Text('Sem imagem!')))
+                              : const Center(child: Text('Sem imagem!')),
                         ),
                       ),
                       Positioned.fill(
@@ -121,27 +131,27 @@ class _ChapterItemState extends State<ChapterItem> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        left: 10,
-                        bottom: 10,
-                        child: Row(
-                          children: [
-                            ...widget.manga!.chapters!.map(
-                              (e) => GestureDetector(
-                                onTap: () => log(e.number.toString()),
-                                child: Tag(
-                                  text: 'EP ${e.number}',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Positioned(
+                      //   left: 10,
+                      //   bottom: 10,
+                      //   child: Row(
+                      //     children: [
+                      //       ...widget.manga!.chapter!.map(
+                      //         (e) => GestureDetector(
+                      //           onTap: () => log(e.number.toString()),
+                      //           child: Tag(
+                      //             text: 'EP ${e.number}',
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Positioned(
                         right: 10,
                         top: 10,
                         child: Tag(
-                          text: 'EP ${widget.manga?.chapters?[0].number}',
+                          text: 'EP ${cutInt(widget.manga?.bookTemp?[0].bookTempCaps?[0].btcCap.toString())}',
                         ),
                       ),
                     ],
@@ -155,7 +165,7 @@ class _ChapterItemState extends State<ChapterItem> {
                       10,
                     ),
                     child: AutoSizeText(
-                      widget.manga?.name ?? '',
+                      widget.manga?.bookNameOriginal ?? '',
                       maxLines: 2,
                       style: TextStyle(
                         overflow: TextOverflow.ellipsis,
@@ -165,7 +175,7 @@ class _ChapterItemState extends State<ChapterItem> {
                       ),
                     ),
                   ),
-                ).tooltip(widget.manga?.name ?? ''),
+                ).tooltip(widget.manga?.bookNameOriginal ?? ''),
               ],
             ),
           ),

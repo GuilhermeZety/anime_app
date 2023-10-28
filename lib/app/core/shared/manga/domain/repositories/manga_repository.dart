@@ -8,6 +8,6 @@ abstract class MangaRepository {
   Future<Either<Failure, List<MangaSlimeEntity>>> search(String value);
   Future<Either<Failure, ChapterSlimeModel>> getChapters(String bookName, int idSerie);
   Future<Either<Failure, List<String>>> getImages(int mangaId, String cap);
-  Future<Either<Failure, List<ChapterReleaseEntity>>> getReleasesMangas(int page);
+  Future<Either<Failure, List<BookInfoModel>>> getReleasesMangas(int page);
   Future<Either<Failure, String>> getDescription(String url);
 }

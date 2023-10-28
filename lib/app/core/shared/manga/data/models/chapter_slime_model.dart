@@ -43,7 +43,7 @@ class ChapterSlimeModel extends ChapterSlimeEntity {
             )
           : null,
       bookInfo: map['book_info'] != null ? BookInfoModel.fromMap(map['book_info'] as Map<String, dynamic>) : null,
-      mangaId: map['book_info']['book_id'] != null ? map['book_info']['book_id'] as String : null,
+      mangaId: map['book_info'] != null && map['book_info']['book_id'] != null ? map['book_info']['book_id'] as String : null,
     );
   }
 
@@ -112,6 +112,7 @@ class BookInfoModel extends BookInfoEntity {
   const BookInfoModel({
     super.bookNameOriginal,
     super.bookName,
+    super.bookId,
     super.bookImage,
     super.bookSinopsis,
     super.bookStatus,
@@ -121,6 +122,7 @@ class BookInfoModel extends BookInfoEntity {
   BookInfoModel copyWith({
     String? bookNameOriginal,
     String? bookName,
+    int? bookId,
     String? bookImage,
     String? bookSinopsis,
     int? bookStatus,
@@ -129,6 +131,7 @@ class BookInfoModel extends BookInfoEntity {
     return BookInfoModel(
       bookNameOriginal: bookNameOriginal ?? this.bookNameOriginal,
       bookName: bookName ?? this.bookName,
+      bookId: bookId ?? this.bookId,
       bookImage: bookImage ?? this.bookImage,
       bookSinopsis: bookSinopsis ?? this.bookSinopsis,
       bookStatus: bookStatus ?? this.bookStatus,
@@ -142,6 +145,7 @@ class BookInfoModel extends BookInfoEntity {
       'book_name': bookName,
       'book_image': bookImage,
       'book_synopsis': bookSinopsis,
+      'book_id': bookId,
       'book_status': bookStatus,
       'book_temp': bookTemp,
     };
@@ -151,7 +155,8 @@ class BookInfoModel extends BookInfoEntity {
     return BookInfoModel(
       bookNameOriginal: map['book_name_original'] != null ? map['book_name_original'] as String : null,
       bookName: map['book_name'] != null ? map['book_name'] as String : null,
-      bookImage: map['book_image'] != null ? map['book_image'] as String : null,
+      bookId: map['book_id'] is int ? map['book_id'] : int.parse(map['book_id']),
+      bookImage: map['book_image'] != null ? (map['book_image'] as String).replaceAll(' ', '%20') : null,
       bookSinopsis: map['book_synopsis'] != null ? map['book_synopsis'] as String : null,
       bookStatus: map['book_status'] != null ? map['book_status'] as int : null,
       bookTemp: map['book_temp'] != null

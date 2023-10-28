@@ -41,11 +41,12 @@ class MangaPageCubit extends Cubit<MangaPageState> {
     emit(MangaPageLoading());
     if (number.isEmpty) {
       caps = capsOriginalObj;
+      emit(MangaPageInitial());
       return;
     }
     List<BookTempCapsEntity> capsFiltered = [];
     for (var cap in capsOriginalObj) {
-      if (cap.btcCap == double.parse(number)) {
+      if (cap.btcCap == (double.parse(number) - 1.0)) {
         capsFiltered.add(cap);
       }
     }
@@ -58,12 +59,8 @@ class MangaPageCubit extends Cubit<MangaPageState> {
 
     if (manga.bookID != null) {
       chapter = await Modular.get<GetChapters>()(GetChaptersParams(idSerie: manga.bookID!, bookName: manga.bookName ?? '')).then((value) => value.fold((l) => null, (r) => r));
-      // capsOriginal = chapter?.bookInfo?.bookTemp?[0].bookTempCaps?.map((e) => e.btcCap.toString()).toList() ?? [];
       capsOriginalObj = chapter?.bookInfo?.bookTemp?[0].bookTempCaps?.map((e) => e).toList() ?? [];
-      // caps = capsOriginal;
       caps = capsOriginalObj;
-      // print(capsOriginal.length);
-      // log(chapter.toString());
     }
     emit(MangaPageInitial());
   }
