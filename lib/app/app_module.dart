@@ -12,7 +12,6 @@ import 'package:anime_app/app/core/shared/manga/manga_logic.dart';
 import 'package:anime_app/app/modules/anime/presentation/anime_page.dart';
 import 'package:anime_app/app/modules/home/home_module.dart';
 import 'package:anime_app/app/modules/manga/home/presentation/manga_page.dart';
-import 'package:anime_app/app/modules/manga/home/presentation/pages/initial/aloalo.dart';
 import 'package:anime_app/app/modules/manga/manga_home_module.dart';
 import 'package:anime_app/app/modules/manga/read/presentation/read_page.dart';
 import 'package:anime_app/app/modules/manga/search/presentation/manga_search_page.dart';

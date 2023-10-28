@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:anime_app/app/core/shared/manga/data/models/chapter_slime_model.dart';
 import 'package:anime_app/app/core/shared/manga/domain/entities/manga_entity.dart';
 import 'package:anime_app/app/core/shared/manga/domain/entities/manga_slime_entity.dart';
 import 'package:anime_app/app/core/shared/manga/domain/usecases/get_chapters.dart';
-import 'package:anime_app/app/core/shared/manga/domain/usecases/get_description.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
