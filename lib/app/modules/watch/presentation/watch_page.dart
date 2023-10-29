@@ -74,33 +74,33 @@ class _WatchPageState extends State<WatchPage> {
               controller: controller,
               onEnterFullscreen: onEnterFullScreen,
             ),
-            if (widget.episodeData.nextEpisodeUuid != null)
-              Positioned(
-                bottom: 100,
-                right: 30,
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Row(
-                    children: [
-                      Button(
-                        child: const Text('Pular Op'),
-                        onPressed: () async {
-                          // Modular.to.pushReplacementNamed(AppRoutes.watch, [episodeData, quality, anime]);s
-                          var timeAtual = controller.player.state.position.inSeconds;
-                          controller.player.seek(Duration(seconds: 87 + timeAtual));
-                        },
-                      ),
-                      const Gap(10),
+            Positioned(
+              bottom: 100,
+              right: 30,
+              child: Opacity(
+                opacity: 0.5,
+                child: Row(
+                  children: [
+                    Button(
+                      child: const Text('Pular Op'),
+                      onPressed: () async {
+                        // Modular.to.pushReplacementNamed(AppRoutes.watch, [episodeData, quality, anime]);s
+                        var timeAtual = controller.player.state.position.inSeconds;
+                        controller.player.seek(Duration(seconds: 87 + timeAtual));
+                      },
+                    ),
+                    const Gap(10),
+                    if (widget.episodeData.nextEpisodeUuid != null)
                       Button(
                         child: const Text('Próximo EP'),
                         onPressed: () async {
                           // Modular.to.pushReplacementNamed(AppRoutes.watch, [episodeData, quality, anime]);s
                         },
                       ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
+            ),
             if (widget.episodeData.previousEpisodeUuid != null)
               Positioned(
                 bottom: 100,
